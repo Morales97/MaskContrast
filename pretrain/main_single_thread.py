@@ -120,7 +120,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
     print(train_transform)
     train_dataset = DatasetKeyQuery(get_train_dataset(p, transform = None), train_transform, 
                                 downsample_sal=not p['model_kwargs']['upsample'])
-    train_samples = None
+    train_sampler = None
     train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=p['train_batch_size'], shuffle=(train_sampler is None),
                     num_workers=p['num_workers'], pin_memory=True, drop_last=True, collate_fn=collate_custom)
     print(colored('Train samples %d' %(len(train_dataset)), 'yellow'))
