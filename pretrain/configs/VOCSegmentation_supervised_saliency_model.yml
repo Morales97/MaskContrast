@@ -21,7 +21,8 @@ model_kwargs:
    use_classification_head: True
 head: deeplab
 # Freeze block 1 and 2 in backbone (~1% miou improvement)
-freeze_layers: True 
+# NOTE cannot freeze layers with the current function (utils.utils.py) when single_thread
+freeze_layers: False 
 
 # Optimizer
 epochs: 40
