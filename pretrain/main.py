@@ -67,6 +67,7 @@ def main():
     assert args.multiprocessing_distributed
     args.distributed = args.world_size > 1 or args.multiprocessing_distributed
     ngpus_per_node = torch.cuda.device_count()
+    pdb.set_trace()
 
     # wandb
     wandb.init(name=args.expt_name, dir=args.save_dir,
