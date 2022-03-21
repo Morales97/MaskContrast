@@ -34,7 +34,7 @@ class VOCSegmentation(data.Dataset):
         if download:
             self._download()
         
-        self.images_dir = os.path.join(self.root, 'JPEGImages')
+        self.images_dir = os.path.join(self.root, 'images')
         valid_saliency = ['supervised_model', 'unsupervised_model']
         assert(saliency in valid_saliency)
         self.saliency = saliency
