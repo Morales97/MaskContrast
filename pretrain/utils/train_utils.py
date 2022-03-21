@@ -63,6 +63,18 @@ def train(p, train_loader, model, optimizer, epoch, amp):
         if i % 25 == 0:
             progress.display(i)
 
+            log_info = OrderedDict({
+                'Epoch Step': i,
+                'Epoch': epoch,
+                'Train Step': i + epoch * len(train_loader),
+                'Loss': losses.val,
+                'Contrastive loss': contrastive_losses.val,
+                'Saliency loss': saliency_losses.val,
+                'Top1': top1.val,
+                'Top5': top5.val,
+            }) 
+            wandb.log(rm_format(log_info))
+
 
 @torch.no_grad()
 def accuracy(output, target, topk=(1,)):

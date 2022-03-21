@@ -24,6 +24,7 @@ from utils.common_config import get_train_dataset, get_train_transformations,\
 from utils.train_utils import train
 from utils.logger import Logger
 from utils.collate import collate_custom
+import wandb
 
 
 # Parser
@@ -50,6 +51,14 @@ parser.add_argument('--multiprocessing-distributed', action='store_true',
                                  'fastest way to use PyTorch for either single node or '
                                  'multi node data parallel training')
 
+# wandb
+parser.add_argument('--save_dir', type=str, default='outputs',
+                    help='dir to save experiment results to')
+parser.add_argument('--project', type=str, default='MaskContrast',
+                    help='wandb project to use')
+parser.add_argument('--entity', type=str, default='morales97',
+                    help='wandb entity to use')
+
 def main():
     args = parser.parse_args()
     args.multiprocessing_distributed = True
@@ -57,16 +66,22 @@ def main():
     args.distributed = args.world_size > 1 or args.multiprocessing_distributed
     ngpus_per_node = torch.cuda.device_count()
 
+    # wandb
+    wandb.init(name=args.expt_name, dir=args.save_dir,
+               config=args, reinit=True, project=args.project, entity=args.entity)
+    os.makedirs(args.save_dir, exist_ok=True)
+    wandb.join()
+
     # Since we have ngpus_per_node processes per node, the total world_size
     # needs to be adjusted accordingly
     args.world_size = ngpus_per_node * args.world_size
     # Use torch.multiprocessing.spawn to launch distributed processes: the
     # main_worker process function
-    mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, args))
+    mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, wandb, args))
     # main_worker(0, ngpus_per_node, args=args)
 
 
-def main_worker(gpu, ngpus_per_node, args):
+def main_worker(gpu, ngpus_per_node, wandb, args):
     # Retrieve config file
     p = create_config(args.config_env, args.config_exp)
 
@@ -182,6 +197,12 @@ def main_worker(gpu, ngpus_per_node, args):
                             'epoch': epoch + 1}, 
                             p['checkpoint'])
 
+            model_artifact = wandb.Artifact('checkpoint_{}'.format(step), type='model')
+            model_artifact.add_file(p['checkpoint'])
+            wandb.log_artifact(model_artifact)
 
 if __name__ == "__main__":
+    wandb.init(name=args.expt_name, dir=args.save_dir,
+               config=args, reinit=True, project=args.project, entity=args.entity)
+
     main()
