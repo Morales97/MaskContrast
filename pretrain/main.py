@@ -204,7 +204,4 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
             wandb.log_artifact(model_artifact)
 
 if __name__ == "__main__":
-    wandb.init(name=args.expt_name, dir=args.save_dir,
-               config=args, reinit=True, project=args.project, entity=args.entity)
-
     main()
