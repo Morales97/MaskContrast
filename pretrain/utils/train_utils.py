@@ -7,6 +7,20 @@ from torch.nn.functional import cross_entropy
 from utils.utils import AverageMeter, ProgressMeter, freeze_layers
 import pdb
 
+
+class ForkedPdb(pdb.Pdb):
+    """A Pdb subclass that may be used
+    from a forked multiprocessing child
+
+    """
+    def interaction(self, *args, **kwargs):
+        _stdin = sys.stdin
+        try:
+            sys.stdin = open('/dev/stdin')
+            pdb.Pdb.interaction(self, *args, **kwargs)
+        finally:
+            sys.stdin = _stdin
+
 def train(p, train_loader, model, optimizer, epoch, amp):
     losses = AverageMeter('Loss', ':.4e')
     contrastive_losses = AverageMeter('Contrastive', ':.4e')
@@ -29,7 +43,7 @@ def train(p, train_loader, model, optimizer, epoch, amp):
         sal_k = batch['key']['sal'].cuda(p['gpu'], non_blocking=True)
 
         logits, labels, saliency_loss = model(im_q=im_q, im_k=im_k, sal_q=sal_q, sal_k=sal_k)
-        #pdb.set_trace()
+        ForkedPdb().set_trace()
 
         # Use E-Net weighting for calculating the pixel-wise loss.
         uniq, freq = torch.unique(labels, return_counts=True)
@@ -85,7 +99,7 @@ def accuracy(output, target, topk=(1,)):
     pred = pred.t()
     correct = pred.eq(target.view(1, -1).expand_as(pred))
     res = []
-    pdb.set_trace()
+    ForkedPdb().set_trace()
     for k in topk:
         correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
         res.append(correct_k.mul_(100.0 / batch_size))
