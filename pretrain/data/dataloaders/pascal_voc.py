@@ -23,7 +23,7 @@ class VOCSegmentation(data.Dataset):
 
     FILE = 'PASCAL_VOC.tgz'
 
-    def __init__(self, root=Path.db_root_dir('VOC2012'),
+    def __init__(self, root=Path.db_root_dir('VOCSegmentation'),
                  saliency='supervised_model', download=True,
                  transform=None, overfit=False):
         super(VOCSegmentation, self).__init__()
@@ -99,7 +99,7 @@ class VOCSegmentation(data.Dataset):
 
         if os.path.isfile(_fpath):
             print('Files already downloaded')
-            return
+            #return
         else:
             print('Downloading dataset from google drive')
             mkdir_if_missing(os.path.dirname(_fpath))
