@@ -71,11 +71,10 @@ def main():
     os.makedirs(args.save_dir, exist_ok=True)
 
     #main_worker(0, ngpus_per_node, wandb, args=args)
-    main_worker(0, ngpus_per_node, args=args)
+    main_worker(0, ngpus_per_node, wandb, args=args)
     #wandb.join()
 
-#def main_worker(gpu, ngpus_per_node, wandb, args):
-def main_worker(gpu, ngpus_per_node, args):
+def main_worker(gpu, ngpus_per_node, wandb, args):
     # Retrieve config file
     p = create_config(args.config_env, args.config_exp)
 
@@ -121,9 +120,8 @@ def main_worker(gpu, ngpus_per_node, args):
     print(train_transform)
     train_dataset = DatasetKeyQuery(get_train_dataset(p, transform = None), train_transform, 
                                 downsample_sal=not p['model_kwargs']['upsample'])
-    train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
     train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=p['train_batch_size'], shuffle=(train_sampler is None),
-                    num_workers=p['num_workers'], pin_memory=True, sampler=train_sampler, drop_last=True, collate_fn=collate_custom)
+                    num_workers=p['num_workers'], pin_memory=True, drop_last=True, collate_fn=collate_custom)
     print(colored('Train samples %d' %(len(train_dataset)), 'yellow'))
     print(colored(train_dataset, 'yellow'))
 
