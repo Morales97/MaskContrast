@@ -68,22 +68,21 @@ def main():
     assert args.multiprocessing_distributed
     args.distributed = args.world_size > 1 or args.multiprocessing_distributed
     ngpus_per_node = torch.cuda.device_count()
-    pdb.set_trace()
 
     # wandb
     wandb.init(name=args.expt_name, dir=args.save_dir,
                config=args, reinit=True, project=args.project, entity=args.entity)
     os.makedirs(args.save_dir, exist_ok=True)
-    wandb.join()
 
     # Since we have ngpus_per_node processes per node, the total world_size
     # needs to be adjusted accordingly
     args.world_size = ngpus_per_node * args.world_size
-    # Use torch.multiprocessing.spawn to launch distributed processes: the
-    # main_worker process function
-    mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, wandb, args))
-    # main_worker(0, ngpus_per_node, args=args)
 
+    # Use torch.multiprocessing.spawn to launch distributed processes: the main_worker process function
+    #mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, wandb, args))
+    # NOTE this is only using one gpu, we should try to use 0 and 1
+    main_worker(0, ngpus_per_node, wandb, args=args)
+    wandb.join()
 
 def main_worker(gpu, ngpus_per_node, wandb, args):
     # Retrieve config file
