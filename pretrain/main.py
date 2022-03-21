@@ -58,6 +58,8 @@ parser.add_argument('--project', type=str, default='MaskContrast',
                     help='wandb project to use')
 parser.add_argument('--entity', type=str, default='morales97',
                     help='wandb entity to use')
+parser.add_argument('--expt_name', type=str, default='',
+                    help='Name of the experiment for wandb')
 
 def main():
     args = parser.parse_args()
