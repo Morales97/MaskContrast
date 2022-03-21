@@ -78,7 +78,8 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
     # Retrieve config file
     p = create_config(args.config_env, args.config_exp)
 
-    args.gpu = 0
+    args.gpu = torch.cuda.current_device()
+    p['gpu'] = torch.cuda.current_device()
 
     print('Python script is {}'.format(os.path.abspath(__file__)))
     print(colored(p, 'red'))
@@ -120,7 +121,6 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
     print(train_transform)
     train_dataset = DatasetKeyQuery(get_train_dataset(p, transform = None), train_transform, 
                                 downsample_sal=not p['model_kwargs']['upsample'])
-    pdb.set_trace()
     train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=p['train_batch_size'], shuffle=True, num_workers=p['num_workers'])
     print(colored('Train samples %d' %(len(train_dataset)), 'yellow'))
     print(colored(train_dataset, 'yellow'))
