@@ -64,8 +64,6 @@ parser.add_argument('--expt_name', type=str, default='',
 def main():
     args = parser.parse_args()
     args.multiprocessing_distributed = False
-    assert args.multiprocessing_distributed
-    args.distributed = args.world_size > 1 or args.multiprocessing_distributed
     ngpus_per_node = torch.cuda.device_count()
 
     # wandb
