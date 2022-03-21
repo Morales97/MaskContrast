@@ -80,7 +80,7 @@ def get_model(p):
 
 
 def get_train_dataset(p, transform=None):
-    if p['train_db_name'] == 'VOCSegmentation':
+    if p['train_db_name'] == 'VOC2012':
         from data.dataloaders.pascal_voc import VOCSegmentation
         return VOCSegmentation(root=Path.db_root_dir(p['train_db_name']),
                             saliency=p['train_db_kwargs']['saliency'],
