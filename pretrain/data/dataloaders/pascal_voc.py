@@ -99,7 +99,7 @@ class VOCSegmentation(data.Dataset):
 
         if os.path.isfile(_fpath):
             print('Files already downloaded')
-            #return
+            return
         else:
             print('Downloading dataset from google drive')
             mkdir_if_missing(os.path.dirname(_fpath))
