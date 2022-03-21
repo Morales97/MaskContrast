@@ -52,7 +52,7 @@ parser.add_argument('--multiprocessing-distributed', action='store_true',
                                  'multi node data parallel training')
 
 # wandb
-parser.add_argument('--save_dir', type=str, default='outputs',
+parser.add_argument('--save_dir', type=str, default='outputs/tmp_last',
                     help='dir to save experiment results to')
 parser.add_argument('--project', type=str, default='MaskContrast',
                     help='wandb project to use')
