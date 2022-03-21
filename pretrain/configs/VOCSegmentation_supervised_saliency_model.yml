@@ -3,7 +3,7 @@
 # Licensed under the CC BY-NC 4.0 license (https://creativecommons.org/licenses/by-nc/4.0/)
 
 # Dataset
-train_db_name: VOCSegmentation
+train_db_name: VOC2012
 train_db_kwargs:
    saliency: supervised_model
 num_workers: 8
