@@ -3,6 +3,7 @@
 # Licensed under the CC BY-NC 4.0 license (https://creativecommons.org/licenses/by-nc/4.0/)
 
 import requests
+import pdb
 
 CHUNK_SIZE = 32768
 
@@ -12,6 +13,8 @@ def download_file_from_google_drive(id, destination):
     session = requests.Session()
 
     response = session.get(URL, params = { 'id' : id }, stream = True)
+
+    pdb.set_trace()
 
     for key, value in response.cookies.items():
         if key.startswith('download_warning'):
