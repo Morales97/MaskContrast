@@ -83,7 +83,7 @@ def main():
     # NOTE this is only using one gpu, we should try to use 0 and 1
     # NOTE 2: the function mp.spawn cannot pass wandb as a tuple
     #main_worker(0, ngpus_per_node, wandb, args=args)
-    main_worker(0, ngpus_per_node, wandb, args=args)
+    main_worker(0, ngpus_per_node, args=args)
     #wandb.join()
 
 #def main_worker(gpu, ngpus_per_node, wandb, args):
