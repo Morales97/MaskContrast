@@ -8,19 +8,6 @@ from utils.utils import AverageMeter, ProgressMeter, freeze_layers
 import pdb
 import sys
 
-class ForkedPdb(pdb.Pdb):
-    """A Pdb subclass that may be used
-    from a forked multiprocessing child
-
-    """
-    def interaction(self, *args, **kwargs):
-        _stdin = sys.stdin
-        try:
-            sys.stdin = open('/dev/stdin')
-            pdb.Pdb.interaction(self, *args, **kwargs)
-        finally:
-            sys.stdin = _stdin
-
 def train(p, train_loader, model, optimizer, epoch, amp):
     losses = AverageMeter('Loss', ':.4e')
     contrastive_losses = AverageMeter('Contrastive', ':.4e')
@@ -43,7 +30,6 @@ def train(p, train_loader, model, optimizer, epoch, amp):
         sal_k = batch['key']['sal'].cuda(p['gpu'], non_blocking=True)
 
         logits, labels, saliency_loss = model(im_q=im_q, im_k=im_k, sal_q=sal_q, sal_k=sal_k)
-        ForkedPdb().set_trace()
 
         # Use E-Net weighting for calculating the pixel-wise loss.
         uniq, freq = torch.unique(labels, return_counts=True)
@@ -60,7 +46,7 @@ def train(p, train_loader, model, optimizer, epoch, amp):
         saliency_losses.update(saliency_loss.item())
         losses.update(loss.item())
 
-        acc1, acc5 = accuracy(logits, labels, topk=(1, 5))
+        acc1, acc5 = 0, 0 #accuracy(logits, labels, topk=(1, 5))
         top1.update(acc1[0], im_q.size(0))
         top5.update(acc5[0], im_q.size(0))
         
@@ -99,7 +85,6 @@ def accuracy(output, target, topk=(1,)):
     pred = pred.t()
     correct = pred.eq(target.view(1, -1).expand_as(pred))
     res = []
-    ForkedPdb().set_trace()
     for k in topk:
         correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
         res.append(correct_k.mul_(100.0 / batch_size))
