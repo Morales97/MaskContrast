@@ -4,6 +4,8 @@
 
 import requests
 import pdb
+from termcolor import colored
+
 
 CHUNK_SIZE = 32768
 
@@ -13,9 +15,9 @@ def download_file_from_google_drive(id, destination):
     session = requests.Session()
 
     response = session.get(URL, params = { 'id' : id }, stream = True)
+    print(colored(response, 'red'))
 
     for key, value in response.cookies.items():
-        print(key)
         if key.startswith('download_warning'):
             token = value
 
