@@ -76,7 +76,7 @@ def train(p, train_loader, model, optimizer, epoch, amp):
                 'Top1': top1.val,
                 'Top5': top5.val,
             }) 
-            wandb.log(rm_format(log_info))
+            #wandb.log(rm_format(log_info))
 
 
 @torch.no_grad()
