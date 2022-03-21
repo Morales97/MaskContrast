@@ -10,4 +10,4 @@
 #SBATCH --mem=30000
 #SBATCH --time=12:00:00
 
-python main.py --expt_name=test 
+python main.py --expt_name=test --config_env configs/env.yml --config_exp configs/VOCSegmentation_supervised_saliency_model.yml
