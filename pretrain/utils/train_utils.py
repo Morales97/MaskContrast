@@ -29,6 +29,7 @@ def train(p, train_loader, model, optimizer, epoch, amp):
         sal_k = batch['key']['sal'].cuda(p['gpu'], non_blocking=True)
 
         logits, labels, saliency_loss = model(im_q=im_q, im_k=im_k, sal_q=sal_q, sal_k=sal_k)
+        pdb.set_trace()
 
         # Use E-Net weighting for calculating the pixel-wise loss.
         uniq, freq = torch.unique(labels, return_counts=True)
