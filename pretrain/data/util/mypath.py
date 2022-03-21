@@ -8,7 +8,7 @@ import os
 class Path(object):
     @staticmethod
     def db_root_dir(database=''):
-        db_root = '/path/to/PASCAL_VOC/' # VOC will be automatically downloaded
+        db_root = '/home/danmoral/MaskContrast/pretrain/data' # VOC will be automatically downloaded
         db_names = ['VOCSegmentation']
 
         if database == '':
