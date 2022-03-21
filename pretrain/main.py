@@ -79,10 +79,11 @@ def main():
 
     # Use torch.multiprocessing.spawn to launch distributed processes: the main_worker process function
     #mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, wandb, args))
-    mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, args))
+    #mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, args))
     # NOTE this is only using one gpu, we should try to use 0 and 1
     # NOTE 2: the function mp.spawn cannot pass wandb as a tuple
     #main_worker(0, ngpus_per_node, wandb, args=args)
+    main_worker(0, ngpus_per_node, wandb, args=args)
     #wandb.join()
 
 #def main_worker(gpu, ngpus_per_node, wandb, args):
