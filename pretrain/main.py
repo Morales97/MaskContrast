@@ -70,8 +70,7 @@ def main():
     ngpus_per_node = torch.cuda.device_count()
 
     # wandb
-    wandb.init(name=args.expt_name, dir=args.save_dir,
-               config=args, reinit=True, project=args.project, entity=args.entity)
+    #wandb.init(name=args.expt_name, dir=args.save_dir, config=args, reinit=True, project=args.project, entity=args.entity)
     os.makedirs(args.save_dir, exist_ok=True)
 
     # Since we have ngpus_per_node processes per node, the total world_size
@@ -80,11 +79,14 @@ def main():
 
     # Use torch.multiprocessing.spawn to launch distributed processes: the main_worker process function
     #mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, wandb, args))
+    mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, args))
     # NOTE this is only using one gpu, we should try to use 0 and 1
-    main_worker(0, ngpus_per_node, wandb, args=args)
-    wandb.join()
+    # NOTE 2: the function mp.spawn cannot pass wandb as a tuple
+    #main_worker(0, ngpus_per_node, wandb, args=args)
+    #wandb.join()
 
-def main_worker(gpu, ngpus_per_node, wandb, args):
+#def main_worker(gpu, ngpus_per_node, wandb, args):
+def main_worker(gpu, ngpus_per_node, args):
     # Retrieve config file
     p = create_config(args.config_env, args.config_exp)
 
@@ -200,9 +202,9 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
                             'epoch': epoch + 1}, 
                             p['checkpoint'])
 
-            model_artifact = wandb.Artifact('checkpoint_{}'.format(step), type='model')
-            model_artifact.add_file(p['checkpoint'])
-            wandb.log_artifact(model_artifact)
+            #model_artifact = wandb.Artifact('checkpoint_{}'.format(step), type='model')
+            #model_artifact.add_file(p['checkpoint'])
+            #wandb.log_artifact(model_artifact)
 
 if __name__ == "__main__":
     main()
