@@ -16,7 +16,7 @@ def download_file_from_google_drive(id, destination):
 
     response = session.get(URL, params = { 'id' : id }, stream = True)
     
-    print(colored(response.cookies, 'red'))
+    print(colored(response.cookies.items(), 'red'))
     token=None
 
     for key, value in response.cookies.items():
