@@ -23,7 +23,7 @@ class VOCSegmentation(data.Dataset):
 
     FILE = 'PASCAL_VOC.tgz'
 
-    def __init__(self, root=Path.db_root_dir('VOCSegmentation'),
+    def __init__(self, root=Path.db_root_dir('VOC2012'),
                  saliency='supervised_model', download=True,
                  transform=None, overfit=False):
         super(VOCSegmentation, self).__init__()
@@ -34,7 +34,7 @@ class VOCSegmentation(data.Dataset):
         if download:
             self._download()
         
-        self.images_dir = os.path.join(self.root, 'images')
+        self.images_dir = os.path.join(self.root, 'JPEGImages')
         valid_saliency = ['supervised_model', 'unsupervised_model']
         assert(saliency in valid_saliency)
         self.saliency = saliency
