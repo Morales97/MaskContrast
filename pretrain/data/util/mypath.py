@@ -9,7 +9,7 @@ class Path(object):
     @staticmethod
     def db_root_dir(database=''):
         db_root = '/home/danmoral/MaskContrast/pretrain/data' # VOC will be automatically downloaded
-        db_names = ['VOCSegmentation']
+        db_names = ['VOC2012']
 
         if database == '':
             return db_root
