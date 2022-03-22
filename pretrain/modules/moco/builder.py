@@ -61,7 +61,7 @@ class ContrastiveModel(nn.Module):
         batch_size = keys.shape[0]
 
         ptr = int(self.queue_ptr)
-        assert self.K % batch_size == 0  # for simplicity
+        #assert self.K % batch_size == 0  # for simplicity  # NOTE this assertion is False at the end of epoch, when batch_size can be different
 
         # replace the keys at ptr (dequeue and enqueue)
         self.queue[:, ptr:ptr + batch_size] = keys.T
