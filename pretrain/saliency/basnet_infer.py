@@ -34,17 +34,17 @@ def save_output(save_dir, save_name, mask):
 
 
 def postprocess(model_output: np.array) -> np.array:
-    """
+	"""
 	adapted from https://github.com/wvangansbeke/Unsupervised-Semantic-Segmentation/tree/main/saliency 
 	We postprocess the predicted saliency mask to remove very small segments. 
 	If the mask is too small overall, we skip the image.
 
 	Args:
-	    model_output: The predicted saliency mask scaled between 0 and 1. 
-	                  Shape is (height, width). 
+		model_output: The predicted saliency mask scaled between 0 and 1. 
+					  Shape is (height, width). 
 	Return:
-            result: The postprocessed saliency mask.
-    """
+			result: The postprocessed saliency mask.
+	"""
 	model_output = model_output.squeeze().cpu().data.numpy()
 	mask = (model_output > 0.5).astype(np.uint8)
 	contours, _ = cv2.findContours(deepcopy(mask), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
