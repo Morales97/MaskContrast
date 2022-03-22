@@ -46,7 +46,7 @@ class Cityscapes(data.Dataset):
         self.sal = []
 
         self.n_samples = n_samples
-        self.files = sorted(recursive_glob(rootdir=self.images_base, suffix=".jpg"))
+        self.files = sorted(recursive_glob(rootdir=self.images_dir, suffix=".jpg"))
         if self.n_samples >= 0:
             self.files = self.files[:self.n_samples]
     
