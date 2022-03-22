@@ -117,12 +117,12 @@ if __name__ == '__main__':
     dataset = Cityscapes()
     sample = dataset.__getitem__(0)
     sample['image'].save('/home/danmoral/test0.jpg')
-    sample['sal'].save('home/danmoral/test0sal.png')
+    sample['sal'].save('/home/danmoral/test0sal.png')
     import data.dataloaders.transforms as transforms
     dataset = Cityscapes(transform=transforms.RandomResizedCrop(224, scale=(0.2, 1.)))
     sample = dataset.__getitem__(0)
     sample['image'].save('/home/danmoral/test0_.jpg')
-    sample['sal'].save('home/danmoral/test0sal_.png')
+    sample['sal'].save('/home/danmoral/test0sal_.png')
     '''
     from matplotlib import pyplot as plt
     # Sample from supervised saliency model
