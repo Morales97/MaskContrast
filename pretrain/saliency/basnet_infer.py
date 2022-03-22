@@ -102,7 +102,7 @@ if __name__ == '__main__':
 		#pred = normPRED(pred)
 		mask = postprocess(out)
 		if mask is None:
-			break
+			continue
 
 		# save
 		save_dir2, save_name = dataset.get_img_save_path(data['index'])
