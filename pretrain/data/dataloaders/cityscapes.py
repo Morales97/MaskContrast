@@ -9,8 +9,8 @@ import tarfile
 import numpy as np
 import torch.utils.data as data
 import pdb
-from data.util.mypath import Path
-from utils.utils import mkdir_if_missing
+
+# from data.util.mypath import Path
 from PIL import Image
 
 def recursive_glob(rootdir=".", suffix=""):
@@ -27,7 +27,7 @@ def recursive_glob(rootdir=".", suffix=""):
 
 class Cityscapes(data.Dataset):
 
-    def __init__(self, root=Path.db_root_dir('cityscapes'), 
+    def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/cityscapes',     #TODO change to use data.util.mypath as in VOCSegmentation
                  saliency='saliency_basenet_tiny', split='leftImg8bit_tiny/train',
                  transform=None, overfit=False):
         super(Cityscapes, self).__init__()
@@ -102,17 +102,6 @@ class Cityscapes(data.Dataset):
         # Class names for sal
         return ['background', 'salient object']
     
-    def _download(self):
-        _fpath = os.path.join(Path.db_root_dir(), self.FILE)
-
-        if os.path.isfile(_fpath):
-            print('Files already downloaded')
-            return
-        else:
-            print('Downloading dataset from google drive')
-            mkdir_if_missing(os.path.dirname(_fpath))
-            download_file_from_google_drive(self.GOOGLE_DRIVE_ID, _fpath)
-
         # extract file
         cwd = os.getcwd()
         print('\nExtracting tar file')
