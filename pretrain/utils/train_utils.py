@@ -38,8 +38,7 @@ def train(p, train_loader, model, optimizer, epoch, amp, wandb=None):
         p_class_non_zero_classes = freq.float() / labels.numel()
         p_class[uniq] = p_class_non_zero_classes
         w_class = 1 / torch.log(1.02 + p_class)
-        contrastive_loss = cross_entropy(logits, labels, weight=w_class,
-                                            reduction='mean')
+        contrastive_loss = cross_entropy(logits, labels, weight=w_class, reduction='mean')
 
         # Calculate total loss and update meters
         loss = contrastive_loss + saliency_loss
@@ -88,6 +87,7 @@ def accuracy(output, target, topk=(1,)):
     _, pred = output.topk(maxk, 1, True, True)
     pred = pred.t()
     correct = pred.eq(target.view(1, -1).expand_as(pred))
+    pdb.set_trace()
     res = []
     for k in topk:
         correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
