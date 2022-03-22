@@ -77,7 +77,8 @@ def train(p, train_loader, model, optimizer, epoch, amp, wandb=None):
                 'Top5': top5.val,
             }) 
             if wandb is not None:
-                wandb.log(rm_format(log_info))
+                #wandb.log(rm_format(log_info))
+                wandb.log(log_info)
 
 
 @torch.no_grad()
