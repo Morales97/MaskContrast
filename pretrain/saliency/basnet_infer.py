@@ -67,7 +67,7 @@ if __name__ == '__main__':
 	# --------- 1. get image path and name ---------
 	
 	image_dir = '../data/cityscapes/leftImg8bit_tiny/'
-	save_dir = '../data/cityscapes/saliency_basnet'
+	save_dir = '../data/cityscapes/saliency_basnet/'
 	model_dir = './basnet.pth'
 		
 	# --------- 2. dataloader ---------
@@ -105,6 +105,6 @@ if __name__ == '__main__':
 			continue
 
 		# save
-		save_dir2, save_name = dataset.get_img_save_path(data['index'])
-		save_output(save_dir + save_dir2, save_name, mask)
+		folder, name = dataset.get_img_save_path(data['index'])
+		save_output(os.join(save_dir, folder), name, mask)
 	
