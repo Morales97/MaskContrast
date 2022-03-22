@@ -29,7 +29,7 @@ def save_output(save_dir, save_name, mask):
 
 	im = Image.fromarray(mask*255).convert('RGB')
 
-	save_path = save_dir + '/' + save_name + '.png'
+	save_path = os.path.join(save_dir, save_name) + '.png'
 	im.save(save_path)
 
 
@@ -106,5 +106,5 @@ if __name__ == '__main__':
 
 		# save
 		folder, name = dataset.get_img_save_path(data['index'])
-		save_output(os.join(save_dir, folder), name, mask)
+		save_output(os.path.join(save_dir, folder), name, mask)
 	
