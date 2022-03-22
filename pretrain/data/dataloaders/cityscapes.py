@@ -111,7 +111,7 @@ class Cityscapes(data.Dataset):
         os.chdir(cwd)
         print('Done!')
 
-
+import torchvision
 class RandomResizedCrop(torchvision.transforms.RandomResizedCrop):
     def __init__(self, size, scale=(0.08, 1.0), ratio=(3. / 4., 4. / 3.)):
         super(RandomResizedCrop, self).__init__(size, scale=scale, ratio=ratio)
