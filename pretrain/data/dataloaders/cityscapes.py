@@ -139,6 +139,7 @@ if __name__ == '__main__':
     sample = dataset.__getitem__(0)
     sample['image'].save('/home/danmoral/test0_.jpg')
     sample['sal'].save('/home/danmoral/test0sal_.png')
+    
     '''
     from matplotlib import pyplot as plt
     # Sample from supervised saliency model

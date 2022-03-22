@@ -53,7 +53,7 @@ def get_model(p):
         backbone_channels = 2048
 
     elif p['backbone'] == 'mobilenetv3':
-
+        pass
 
     else:
         raise ValueError('Invalid backbone {}'.format(p['backbone']))
