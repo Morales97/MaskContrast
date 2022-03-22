@@ -34,6 +34,7 @@ class Cityscapes(data.Dataset):
 
         self.root = root
         self.transform = transform
+        self.split = split
 
         self.images_dir = os.path.join(self.root, self.split)
         valid_saliency = ['saliency_basenet_tiny']
