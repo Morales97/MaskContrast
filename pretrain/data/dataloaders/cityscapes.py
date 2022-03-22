@@ -112,14 +112,30 @@ class Cityscapes(data.Dataset):
         print('Done!')
 
 
+class RandomResizedCrop(torchvision.transforms.RandomResizedCrop):
+    def __init__(self, size, scale=(0.08, 1.0), ratio=(3. / 4., 4. / 3.)):
+        super(RandomResizedCrop, self).__init__(size, scale=scale, ratio=ratio)
+        self.interpolation_img = Image.BILINEAR
+        self.interpolation_sal = Image.NEAREST
+    
+    def __call__(self, sample):
+        img = sample['image']
+        sal = sample['sal']
+
+        i, j, h, w = self.get_params(img, self.scale, self.ratio)
+        import torchvision.transforms.functional as F
+
+        sample['image'] = F.resized_crop(img, i, j, h, w, self.size, self.interpolation_img)
+        sample['sal'] = F.resized_crop(sal, i, j, h, w, self.size, self.interpolation_sal)
+        return sample
+
 if __name__ == '__main__':
     """ For purpose of debugging """
     dataset = Cityscapes()
     sample = dataset.__getitem__(0)
     sample['image'].save('/home/danmoral/test0.jpg')
     sample['sal'].save('/home/danmoral/test0sal.png')
-    import data.dataloaders.transforms as transforms
-    dataset = Cityscapes(transform=transforms.RandomResizedCrop(224, scale=(0.2, 1.)))
+    dataset = Cityscapes(transform=RandomResizedCrop(224, scale=(0.2, 1.)))
     sample = dataset.__getitem__(0)
     sample['image'].save('/home/danmoral/test0_.jpg')
     sample['sal'].save('/home/danmoral/test0sal_.png')
