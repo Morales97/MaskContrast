@@ -51,9 +51,9 @@ def postprocess(model_output: np.array) -> np.array:
 	
 	# Throw out small segments
 	for contour in contours:
-	    segment_mask = np.zeros((mask.shape[0], mask.shape[1]), dtype=np.uint8)
-	    segment_mask = cv2.drawContours(segment_mask, [contour], 0, 255, thickness=cv2.FILLED)
-	    area = (np.sum(segment_mask) / 255.0) / np.prod(segment_mask.shape)
+		segment_mask = np.zeros((mask.shape[0], mask.shape[1]), dtype=np.uint8)
+		segment_mask = cv2.drawContours(segment_mask, [contour], 0, 255, thickness=cv2.FILLED)
+		area = (np.sum(segment_mask) / 255.0) / np.prod(segment_mask.shape)
 			if area < 0.01:
 				mask[segment_mask == 255] = 0
 
