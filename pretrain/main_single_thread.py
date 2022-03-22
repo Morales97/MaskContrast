@@ -92,15 +92,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
     print(colored('Retrieve optimizer', 'blue'))
     optimizer = get_optimizer(p, model.parameters())
     print(optimizer)
-
-    # Nvidia-apex
-    if args.nvidia_apex:
-        print(colored('Using mixed precision training', 'blue'))
-        from apex import amp
-        model, optimizer = amp.initialize(model, optimizer, opt_level="O2",
-                                            keep_batchnorm_fp32=True, loss_scale="dynamic")
-    else:
-        amp = None
+    amp = None
     
     # When using a single GPU per process and per
     # DistributedDataParallel, we need to divide the batch size

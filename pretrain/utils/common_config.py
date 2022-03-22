@@ -52,6 +52,9 @@ def get_model(p):
         backbone = resnet.__dict__['resnet50'](pretrained=False)
         backbone_channels = 2048
 
+    elif p['backbone'] == 'mobilenetv3':
+
+
     else:
         raise ValueError('Invalid backbone {}'.format(p['backbone']))
 
@@ -86,6 +89,10 @@ def get_train_dataset(p, transform=None):
                             saliency=p['train_db_kwargs']['saliency'],
                             transform=transform)
     
+    if p['train_db_name'] == 'cityscapes':
+        from data.dataloaders.cityscapes import cityscapes
+        pass
+        
     else:    
         raise ValueError('Invalid train db name {}'.format(p['train_db_name']))   
  
