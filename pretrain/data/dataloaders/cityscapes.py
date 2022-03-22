@@ -60,7 +60,7 @@ class Cityscapes(data.Dataset):
             if os.path.isfile(sal_path):
                 self.images.append(img_path)
                 self.sal.append(sal_path)
-        print("Found %d images with its corresponding %d saliency maps" % (len(self.images), len(self.sal)))
+        print("Found %d images with saliency map, out of %d total images" % (len(self.images), len(self.files)))
 
         assert (len(self.images) == len(self.sal))
 
@@ -69,8 +69,6 @@ class Cityscapes(data.Dataset):
             self.images = self.images[:n_of]
             self.sal = self.sal[:n_of]
 
-        # Display stats
-        print('Number of images: {:d}'.format(len(self.images)))
 
     def __getitem__(self, index):
         sample = {}
@@ -117,6 +115,8 @@ class Cityscapes(data.Dataset):
 if __name__ == '__main__':
     """ For purpose of debugging """
     dataset = Cityscapes()
+    sample = dataset.__getitem__(0)
+    sample['image'].save('/home/danmoral/test0.jpg')
     '''
     from matplotlib import pyplot as plt
     # Sample from supervised saliency model

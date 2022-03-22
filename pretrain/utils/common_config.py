@@ -90,9 +90,9 @@ def get_train_dataset(p, transform=None):
                             transform=transform)
     
     if p['train_db_name'] == 'cityscapes':
-        from data.dataloaders.cityscapes import cityscapes
-        pass
-        
+        from data.dataloaders.cityscapes import Cityscapes
+        return Cityscapes(transform=transform)
+
     else:    
         raise ValueError('Invalid train db name {}'.format(p['train_db_name']))   
  
