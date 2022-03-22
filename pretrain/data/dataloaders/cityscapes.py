@@ -28,7 +28,7 @@ def recursive_glob(rootdir=".", suffix=""):
 class Cityscapes(data.Dataset):
 
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/cityscapes',     #TODO change to use data.util.mypath as in VOCSegmentation
-                 saliency='saliency_basnet_tiny', split='leftImg8bit_tiny/train', n_samples=-1,
+                 saliency='saliency_basnet_tiny', split='leftImg8bit_tiny/train', n_samples=128,
                  transform=None, overfit=False):
         super(Cityscapes, self).__init__()
 
@@ -139,7 +139,7 @@ if __name__ == '__main__':
     sample = dataset.__getitem__(0)
     sample['image'].save('/home/danmoral/test0_.jpg')
     sample['sal'].save('/home/danmoral/test0sal_.png')
-    
+
     '''
     from matplotlib import pyplot as plt
     # Sample from supervised saliency model

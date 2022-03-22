@@ -159,7 +159,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
                         'epoch': epoch + 1}, 
                         p['checkpoint'])
 
-        model_artifact = wandb.Artifact('checkpoint_{}'.format(step), type='model')
+        model_artifact = wandb.Artifact('checkpoint_{}'.format(epoch), type='model')
         model_artifact.add_file(p['checkpoint'])
         wandb.log_artifact(model_artifact)
 
