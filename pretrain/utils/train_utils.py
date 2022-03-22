@@ -9,7 +9,7 @@ import pdb
 import sys
 from collections import OrderedDict
 
-def train(p, train_loader, model, optimizer, epoch, amp):
+def train(p, train_loader, model, optimizer, epoch, amp, wandb=None):
     losses = AverageMeter('Loss', ':.4e')
     contrastive_losses = AverageMeter('Contrastive', ':.4e')
     saliency_losses = AverageMeter('CE', ':.4e')
@@ -76,7 +76,8 @@ def train(p, train_loader, model, optimizer, epoch, amp):
                 'Top1': top1.val,
                 'Top5': top5.val,
             }) 
-            #wandb.log(rm_format(log_info))
+            if wandb is not None:
+                wandb.log(rm_format(log_info))
 
 
 @torch.no_grad()

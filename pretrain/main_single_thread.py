@@ -66,13 +66,11 @@ def main():
     args.multiprocessing_distributed = False
     ngpus_per_node = torch.cuda.device_count()
 
-    # wandb
     wandb.init(name=args.expt_name, dir=args.save_dir, config=args, reinit=True, project=args.project, entity=args.entity)
     os.makedirs(args.save_dir, exist_ok=True)
 
-    #main_worker(0, ngpus_per_node, wandb, args=args)
     main_worker(0, ngpus_per_node, wandb, args=args)
-    #wandb.join()
+    wandb.join()
 
 def main_worker(gpu, ngpus_per_node, wandb, args):
     # Retrieve config file
@@ -155,25 +153,23 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
 
         # Train 
         print('Train ...')
-        eval_train = train(p, train_dataloader, model, 
-                                    optimizer, epoch, amp)
+        eval_train = train(p, train_dataloader, model, optimizer, epoch, amp, wandb)
 
         # Checkpoint
-        if args.rank % ngpus_per_node == 0:
-            print('Checkpoint ...')
-            if args.nvidia_apex:
-                torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(),
-                            'amp': amp.state_dict(), 'epoch': epoch + 1}, 
-                            p['checkpoint'])
+        print('Checkpoint ...')
+        if args.nvidia_apex:
+            torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(),
+                        'amp': amp.state_dict(), 'epoch': epoch + 1}, 
+                        p['checkpoint'])
 
-            else:
-                torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(), 
-                            'epoch': epoch + 1}, 
-                            p['checkpoint'])
+        else:
+            torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(), 
+                        'epoch': epoch + 1}, 
+                        p['checkpoint'])
 
-            #model_artifact = wandb.Artifact('checkpoint_{}'.format(step), type='model')
-            #model_artifact.add_file(p['checkpoint'])
-            #wandb.log_artifact(model_artifact)
+        model_artifact = wandb.Artifact('checkpoint_{}'.format(step), type='model')
+        model_artifact.add_file(p['checkpoint'])
+        wandb.log_artifact(model_artifact)
 
 if __name__ == "__main__":
     main()
