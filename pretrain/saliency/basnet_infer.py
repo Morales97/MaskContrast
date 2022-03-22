@@ -90,8 +90,8 @@ if __name__ == '__main__':
 
 		#print('inferencing... ', i)
 	
-		image = data['image'].to(device)
-		image = image.type(torch.FloatTensor)
+		image = data['image']
+		image = image.type(torch.FloatTensor).to(device)
 
 		image = Variable(image)
 		out = net(image)
