@@ -46,11 +46,11 @@ def train(p, train_loader, model, optimizer, epoch, amp, wandb=None):
         saliency_losses.update(saliency_loss.item())
         losses.update(loss.item())
 
-        ''' 
+        
         acc1, acc5 = accuracy(logits, labels, topk=(1, 5))
         top1.update(acc1[0], im_q.size(0))
         top5.update(acc5[0], im_q.size(0))
-        '''
+        
 
         # Update model
         optimizer.zero_grad()
