@@ -24,6 +24,7 @@ class ContrastiveModel(nn.Module):
         self.K = p['moco_kwargs']['K'] 
         self.m = p['moco_kwargs']['m'] 
         self.T = p['moco_kwargs']['T']
+        self.distributed = p['distributed']
 
         # create the model 
         self.model_q = get_model(p)
@@ -144,13 +145,15 @@ class ContrastiveModel(nn.Module):
             self._momentum_update_key_encoder()  # update the key encoder
 
             # shuffle for making use of BN
-            im_k, idx_unshuffle = self._batch_shuffle_ddp(im_k)
+            if self.distributed:
+                im_k, idx_unshuffle = self._batch_shuffle_ddp(im_k)
 
             k, _ = self.model_k(im_k)  # keys: N x C x H x W
             k = nn.functional.normalize(k, dim=1)
 
             # undo shuffle
-            k = self._batch_unshuffle_ddp(k, idx_unshuffle)
+            if self.distributed:
+                k = self._batch_unshuffle_ddp(k, idx_unshuffle)
             
             # prototypes k
             k = k.reshape(batch_size, self.dim, -1) # B x dim x H.W

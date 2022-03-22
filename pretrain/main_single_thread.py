@@ -80,6 +80,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
 
     args.gpu = torch.cuda.current_device()
     p['gpu'] = torch.cuda.current_device()
+    p['distributed'] = False
 
     print('Python script is {}'.format(os.path.abspath(__file__)))
     print(colored(p, 'red'))

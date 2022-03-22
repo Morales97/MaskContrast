@@ -94,6 +94,7 @@ def main_worker(gpu, ngpus_per_node, args):
     # Check gpu id
     args.gpu = gpu
     p['gpu'] = gpu
+    p['distributed'] = True
     if args.gpu != 0:
         def print_pass(*args):
             pass
