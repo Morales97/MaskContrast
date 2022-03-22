@@ -52,15 +52,15 @@ class Cityscapes(data.Dataset):
     
         if not self.files:
             raise Exception("No files found in %s" % self.images_dir)
-        print("Found %d %s images" % (len(self.files), split))
 
-        pdb.set_trace()
-        for f in self.files:
-            _image = os.path.join(self.images_dir, f + ".jpg")
-            _sal = os.path.join(self.sal_dir, f + ".png")
-            if os.path.isfile(_image) and os.path.isfile(_sal):
-                self.images.append(_image)
-                self.sal.append(_sal)
+        for img_path in self.files:
+            city = img_path.split(os.sep)[-2]
+            sal_name = img_path.split(os.sep)[-1].rstrip('.jpg') + '.png'
+            sal_path = os.path.join(self.sal_dir, city, sal_name)
+            if os.path.isfile(sal_path):
+                self.images.append(img_path)
+                self.sal.append(sal_path)
+        print("Found %d images with its corresponding %d saliency maps" % (len(self.images), len(self.sal)))
 
         assert (len(self.images) == len(self.sal))
 
