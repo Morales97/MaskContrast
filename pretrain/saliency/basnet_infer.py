@@ -73,7 +73,7 @@ if __name__ == '__main__':
 	# --------- 2. dataloader ---------
 	#1. dataload
 	transform = transforms.Compose([transforms.ToTensor()])
-	dataset = cityscapesDataset(image_path=image_dir, transform=transform, n_samples=20)
+	dataset = cityscapesDataset(image_path=image_dir, transform=transform)
 	dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
 	
 	# --------- 3. model define ---------
