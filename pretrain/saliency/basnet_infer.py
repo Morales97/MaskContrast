@@ -69,7 +69,9 @@ if __name__ == '__main__':
 	image_dir = '../data/cityscapes/leftImg8bit_tiny/'
 	save_dir = '../data/cityscapes/saliency_basnet/'
 	model_dir = './basnet.pth'
-		
+	
+	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 	# --------- 2. dataloader ---------
 	#1. dataload
 	transform = transforms.Compose([transforms.ToTensor()])
@@ -80,8 +82,7 @@ if __name__ == '__main__':
 	print("...load BASNet...")
 	net = BASNet(3,1)
 	net.load_state_dict(torch.load(model_dir))
-	if torch.cuda.is_available():
-		net.cuda()
+	net.to(device)
 	net.eval()
 	
 	# --------- 4. inference for each image ---------
@@ -89,10 +90,8 @@ if __name__ == '__main__':
 
 		#print('inferencing... ', i)
 	
-		image = data['image']
+		image = data['image'].to(device)
 		image = image.type(torch.FloatTensor)
-		if torch.cuda.is_available():
-			image.cuda()
 
 		image = Variable(image)
 		out = net(image)
