@@ -97,8 +97,8 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
     # When using a single GPU per process and per
     # DistributedDataParallel, we need to divide the batch size
     # ourselves based on the total number of GPUs we have
-    p['train_batch_size'] = int(p['train_batch_size'] / ngpus_per_node)
-    p['num_workers'] = int((p['num_workers'] + ngpus_per_node - 1) / ngpus_per_node)
+    #p['train_batch_size'] = int(p['train_batch_size'] / ngpus_per_node)
+    #p['num_workers'] = int((p['num_workers'] + ngpus_per_node - 1) / ngpus_per_node)
     
     # CUDNN
     print(colored('Set CuDNN benchmark', 'blue')) 
@@ -145,7 +145,6 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
 
         # Train 
         print('Train ...')
-        pdb.set_trace()
         eval_train = train(p, train_dataloader, model, optimizer, epoch, amp, wandb)
 
         # Checkpoint
