@@ -75,8 +75,6 @@ class ContrastiveModel(nn.Module):
             self.queue[:, ptr:ptr + batch_size] = keys.T
             ptr = (ptr + batch_size) % self.K  # move pointer
 
-        print(ptr)
-        print(batch_size)
         self.queue_ptr[0] = ptr
 
     @torch.no_grad()
