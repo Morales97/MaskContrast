@@ -145,6 +145,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
 
         # Train 
         print('Train ...')
+        pdb.set_trace()
         eval_train = train(p, train_dataloader, model, optimizer, epoch, amp, wandb)
 
         # Checkpoint

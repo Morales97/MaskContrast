@@ -24,7 +24,6 @@ def train(p, train_loader, model, optimizer, epoch, amp, wandb=None):
         model = freeze_layers(model)
 
     for i, batch in enumerate(train_loader):
-        pdb.set_trace()
         # Forward pass
         im_q = batch['query']['image'].cuda(p['gpu'], non_blocking=True)
         im_k = batch['key']['image'].cuda(p['gpu'], non_blocking=True)
