@@ -14,5 +14,5 @@
 #python main_single_thread.py --expt_name=test_no_acc --config_env configs/env.yml --config_exp configs/VOCSegmentation_supervised_saliency_model.yml
 
 # cityscapes
-python main_single_thread.py --expt_name=test_CS_no_acc --config_env configs/env.yml --config_exp configs/cityscapes.yml
+python main_single_thread.py --expt_name=test_CS_no_acc_from_39 --config_env configs/env.yml --config_exp configs/cityscapes.yml
 
