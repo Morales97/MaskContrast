@@ -63,11 +63,20 @@ class ContrastiveModel(nn.Module):
         ptr = int(self.queue_ptr)
         #assert self.K % batch_size == 0  # for simplicity  # NOTE this assertion is False at the end of epoch, when batch_size can be different
 
-        # replace the keys at ptr (dequeue and enqueue)
-        pdb.set_trace()
-        self.queue[:, ptr:ptr + batch_size] = keys.T
-        ptr = (ptr + batch_size) % self.K  # move pointer
+        # To deal with the case of 'not self.K % batch_size'
+        if ptr + batch_size > self.queue.shape[1]:
+            diff = ptr + batch_size - self.queue.shape[1]
+            self.queue[:, ptr:] = keys.T[:, :batch_size - diff]
+            self.queue[:, :diff] = keys.T[:, batch_size - diff:] 
+            ptr = diff
 
+        else:
+            # replace the keys at ptr (dequeue and enqueue)
+            self.queue[:, ptr:ptr + batch_size] = keys.T
+            ptr = (ptr + batch_size) % self.K  # move pointer
+
+        print(ptr)
+        print(batch_size)
         self.queue_ptr[0] = ptr
 
     @torch.no_grad()
