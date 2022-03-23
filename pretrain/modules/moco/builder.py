@@ -6,7 +6,7 @@
 # 
 # Pixel-wise contrastive loss based upon our paper
 
-
+import pdb
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -64,6 +64,7 @@ class ContrastiveModel(nn.Module):
         #assert self.K % batch_size == 0  # for simplicity  # NOTE this assertion is False at the end of epoch, when batch_size can be different
 
         # replace the keys at ptr (dequeue and enqueue)
+        pdb.set_trace()
         self.queue[:, ptr:ptr + batch_size] = keys.T
         ptr = (ptr + batch_size) % self.K  # move pointer
 
