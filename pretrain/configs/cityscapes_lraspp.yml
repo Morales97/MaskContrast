@@ -6,6 +6,9 @@
 train_db_name: cityscapes
 train_db_kwargs:
    saliency: saliency_basnet_tiny
+train_db2_name: None
+train_db2_kwargs:
+   saliency: None
 num_workers: 8
 train_batch_size: 64
 
