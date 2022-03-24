@@ -130,11 +130,11 @@ class RandomResizedCrop(torchvision.transforms.RandomResizedCrop):
 
 if __name__ == '__main__':
     """ For purpose of debugging """
-    dataset = Cityscapes()
+    dataset = Gta()
     sample = dataset.__getitem__(0)
     sample['image'].save('/home/danmoral/test0.jpg')
     sample['sal'].save('/home/danmoral/test0sal.png')
-    dataset = Cityscapes(transform=RandomResizedCrop(224, scale=(0.2, 1.)))
+    dataset = Gta(transform=RandomResizedCrop(224, scale=(0.2, 1.)))
     sample = dataset.__getitem__(0)
     sample['image'].save('/home/danmoral/test0_.jpg')
     sample['sal'].save('/home/danmoral/test0sal_.png')

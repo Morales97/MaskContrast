@@ -80,6 +80,92 @@ def train(p, train_loader, model, optimizer, epoch, amp, wandb=None):
                 wandb.log(log_info)
 
 
+def train_two_datasets(p, train_loader, train_loader_2, model, optimizer, epoch, amp, wandb=None):
+    losses = AverageMeter('Loss', ':.4e')
+    contrastive_losses = AverageMeter('Contrastive', ':.4e')
+    saliency_losses = AverageMeter('CE', ':.4e')
+    top1 = AverageMeter('Acc@1', ':6.2f')
+    top5 = AverageMeter('Acc@5', ':6.2f')
+    progress = ProgressMeter(len(train_loader), 
+                        [losses, contrastive_losses, saliency_losses, top1, top5],
+                        prefix="Epoch: [{}]".format(epoch))
+    model.train()
+
+    if p['freeze_layers']:
+        model = freeze_layers(model)
+
+    data_iter_1 = iter(train_loader)
+    data_iter_2 = iter(train_loader_2)
+
+    step = 0
+    while True:
+        step += 1
+        if step % len(data_iter_1) == 0 or step % len(data_iter_2) == 0:
+            # if reached end of a dataloader, finish epoch
+            # TODO check that this condition does not leave last batch unused
+            break
+
+        batch_1 = next(data_iter_1)
+        batch_2 = next(data_iter_2)
+
+        optimizer.zero_grad()
+        loss = 0
+        for batch in [batch_1, batch_2]:
+            # Forward pass
+            im_q = batch['query']['image'].cuda(p['gpu'], non_blocking=True)
+            im_k = batch['key']['image'].cuda(p['gpu'], non_blocking=True)
+            sal_q = batch['query']['sal'].cuda(p['gpu'], non_blocking=True)
+            sal_k = batch['key']['sal'].cuda(p['gpu'], non_blocking=True)
+
+            logits, labels, saliency_loss = model(im_q=im_q, im_k=im_k, sal_q=sal_q, sal_k=sal_k)
+
+            # Use E-Net weighting for calculating the pixel-wise loss.
+            uniq, freq = torch.unique(labels, return_counts=True)
+            p_class = torch.zeros(logits.shape[1], dtype=torch.float32).cuda(p['gpu'], non_blocking=True)
+            p_class_non_zero_classes = freq.float() / labels.numel()
+            p_class[uniq] = p_class_non_zero_classes
+            w_class = 1 / torch.log(1.02 + p_class)
+            contrastive_loss = cross_entropy(logits, labels, weight=w_class, reduction='mean')
+
+            # Calculate total loss and update meters
+            loss += contrastive_loss + saliency_loss
+            contrastive_losses.update(contrastive_loss.item())
+            saliency_losses.update(saliency_loss.item())
+            losses.update(loss.item())
+
+            '''
+            acc1, acc5 = accuracy(logits, labels, topk=(1, 5))
+            top1.update(acc1[0], im_q.size(0))
+            top5.update(acc5[0], im_q.size(0))
+            '''
+
+        # Update model
+        if amp is not None: # Mixed precision
+            with amp.scale_loss(loss, optimizer) as scaled_loss:
+                scaled_loss.backward()            
+        else:
+            loss.backward()
+        optimizer.step()
+
+        # Display progress
+        if i % 25 == 0:
+            progress.display(i)
+
+            log_info = OrderedDict({
+                'Epoch Step': i,
+                'Epoch': epoch,
+                'Train Step': i + epoch * len(train_loader),
+                'Loss': losses.val,
+                'Contrastive loss': contrastive_losses.val,
+                'Saliency loss': saliency_losses.val,
+                'Top1': top1.val,
+                'Top5': top5.val,
+            }) 
+            if wandb is not None:
+                wandb.log(log_info)
+
+
+
 @torch.no_grad()
 def accuracy(output, target, topk=(1,)):
     maxk = max(topk)

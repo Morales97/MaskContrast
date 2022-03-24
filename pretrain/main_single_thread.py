@@ -20,7 +20,7 @@ from utils.config import create_config
 from utils.common_config import get_train_dataset, get_train_transformations,\
                                 get_train_dataloader, get_optimizer, adjust_learning_rate
 
-from utils.train_utils import train
+from utils.train_utils import train, train_two_datasets
 from utils.logger import Logger
 from utils.collate import collate_custom
 import wandb
@@ -154,7 +154,12 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
 
         # Train 
         print('Train ...')
-        eval_train = train(p, train_dataloader, model, optimizer, epoch, amp, wandb)
+        # Use one dataset
+        if p['train_db2_name'] is None:
+            eval_train = train(p, train_dataloader, model, optimizer, epoch, amp, wandb)
+        # Use two datasets
+        else:
+            eval_train = train_two_datasets(p, train_dataloader, train_dataloader_2, model, optimizer, epoch, amp, wandb)
 
         # Checkpoint
         print('Checkpoint ...')
