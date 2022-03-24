@@ -49,7 +49,7 @@ def get_model(p):
         backbone, low_ch, high_ch = lraspp.get_backbone_lraspp_mobilenetv3()
 
         # Get head
-        if p['head'] == 'LR-ASPP':
+        if p['head'] == 'lraspp':
             out_dim = p['model_kwargs']['ndim']
             decoder = lraspp.LRASPPHead_with_saliency(low_ch, high_ch, out_dim)
         else:
