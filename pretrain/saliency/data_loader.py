@@ -6,6 +6,8 @@ from skimage import io, transform, color
 import numpy as np
 import math
 from PIL import Image
+import torchvision
+import torchvision.transforms.functional as TF
 
 import pdb
 import os
