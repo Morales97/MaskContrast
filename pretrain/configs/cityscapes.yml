@@ -23,10 +23,10 @@ head: deeplab
 # Freeze block 1 and 2 in backbone (~1% miou improvement)
 # NOTE cannot freeze layers with the current function (utils.utils.py) when single_thread
 freeze_layers: False 
-load_checkpoint: True
+load_checkpoint: False
 
 # Optimizer
-epochs: 80
+epochs: 40
 optimizer: sgd
 optimizer_kwargs:
    lr: 0.004

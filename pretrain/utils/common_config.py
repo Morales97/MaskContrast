@@ -42,42 +42,58 @@ def load_pretrained_weights(p, model):
  
 def get_model(p):
     # Get backbone
-    if p['backbone'] == 'resnet18':
-        import torchvision.models.resnet as resnet
-        backbone = resnet.__dict__['resnet18'](pretrained=False)
-        backbone_channels = 512
-    
-    elif p['backbone'] == 'resnet50':
-        import torchvision.models.resnet as resnet
-        backbone = resnet.__dict__['resnet50'](pretrained=False)
-        backbone_channels = 2048
 
-    elif p['backbone'] == 'mobilenetv3':
-        pass
+    # MobileNetV3
+    if p['backbone'] == 'mobilenetv3':
+        import modules.lraspp
+        backbone, low_ch, high_ch = get_backbone_lraspp_mobilenetv3()
+
+        # Get head
+        if p['head'] == 'LR-ASPP':
+            out_dim = p['model_kwargs']['ndim']
+            decoder = LRASPPHead_with_saliency(low_ch, high_ch, out_dim)
+        else:
+            raise ValueError('Invalid head {}'.format(p['head']))
+
+        from modules.models import ContrastiveSegmentationModel_LRASPP
+        return ContrastiveSegmentationModel_LRASPP(backbone, decoder, p['model_kwargs']['upsample'])
+
+    # ResNet
+    elif 'resnet' in p['backbone']:
+        if p['backbone'] == 'resnet18':
+            import torchvision.models.resnet as resnet
+            backbone = resnet.__dict__['resnet18'](pretrained=False)
+            backbone_channels = 512
+        elif p['backbone'] == 'resnet50':
+            import torchvision.models.resnet as resnet
+            backbone = resnet.__dict__['resnet50'](pretrained=False)
+            backbone_channels = 2048
+        else:
+            raise ValueError('Invalid backbone {}'.format(p['backbone']))
+
+        # Load pretrained weights
+        if p['backbone_kwargs']['pretraining']:
+            load_pretrained_weights(p, backbone)
+
+        # Dilate network
+        if p['backbone_kwargs']['dilated']:
+            from modules.resnet_dilated import ResnetDilated
+            backbone = ResnetDilated(backbone)
+
+        # Get head
+        if p['head'] == 'deeplab':
+            from modules.deeplab import DeepLabHead
+            out_dim = p['model_kwargs']['ndim']
+            decoder = DeepLabHead(backbone_channels, out_dim)
+        else:
+            raise ValueError('Invalid head {}'.format(p['head']))
 
     else:
         raise ValueError('Invalid backbone {}'.format(p['backbone']))
 
-    # Load pretrained weights
-    if p['backbone_kwargs']['pretraining']:
-        load_pretrained_weights(p, backbone)
-
-    if p['backbone_kwargs']['dilated']:
-        from modules.resnet_dilated import ResnetDilated
-        backbone = ResnetDilated(backbone)
-    
-    # Get head
-    if p['head'] == 'deeplab':
-        from modules.deeplab import DeepLabHead
-        nc = p['model_kwargs']['ndim']
-        head = DeepLabHead(backbone_channels, nc)
-
-    else:
-        raise ValueError('Invalid head {}'.format(p['head']))
-
-    # Compose model from backbone and head
+    # Compose model from backbone and decoder
     from modules.models import ContrastiveSegmentationModel
-    return ContrastiveSegmentationModel(backbone, head, p['model_kwargs']['head'], 
+    return ContrastiveSegmentationModel(backbone, decoder, p['model_kwargs']['head'], 
                                                 p['model_kwargs']['upsample'], 
                                                 p['model_kwargs']['use_classification_head'])
 

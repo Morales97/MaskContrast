@@ -43,6 +43,7 @@ class ContrastiveSegmentationModel(nn.Module):
             sal = self.classification_head(embedding)
 
         # Upsample to input resolution
+        pdb.set_trace()
         if self.upsample: 
             x = F.interpolate(x, size=input_shape, mode='bilinear', align_corners=False)
             if self.use_classification_head:
@@ -53,3 +54,29 @@ class ContrastiveSegmentationModel(nn.Module):
             return x, sal.squeeze()
         else:
             return x
+
+
+class ContrastiveSegmentationModel_LRASPP(nn.Module):
+    '''
+    Modified from MaskContrast's implementation
+    Need a custom class for the case of using LRASPP: cannot get the head as simply the last decoder layer
+    '''
+    def __init__(self, backbone, decoder, upsample):
+        super(ContrastiveSegmentationModel, self).__init__()
+        self.backbone = backbone
+        self.decoder = decoder
+        self.upsample = upsample
+
+    def forward(self, x):
+        # Standard model
+        input_shape = x.shape[-2:]
+        x = self.backbone(x)
+        x = self.decoder(x)
+
+        # Upsample to input resolution
+        if self.upsample: 
+            x['out'] = F.interpolate(x['out'], size=input_shape, mode='bilinear', align_corners=False)
+            x['sal'] = F.interpolate(x['sal'], size=input_shape, mode='bilinear', align_corners=False)
+
+        return x['out'], x['sal'].squeeze()
+
