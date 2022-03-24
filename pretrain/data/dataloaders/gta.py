@@ -30,7 +30,7 @@ class Gta(data.Dataset):
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/gta5',     #TODO change to use data.util.mypath as in VOCSegmentation
                  saliency='saliency_basnet_tiny', split='images_tiny', n_samples=-1,
                  transform=None, overfit=False):
-        super(Cityscapes, self).__init__()
+        super(Gta, self).__init__()
 
         self.root = root
         self.transform = transform
