@@ -110,8 +110,8 @@ class gtaDataset(Dataset):
         if size == "small":
             self.img_size = (1280, 720) 
         elif size == "tiny":
-            self.img_size = (640, 360)
-            self.crop_size = (512, 256)
+            self.img_size = (640, 360)  # w, h -- PIL uses (w, h) format
+            self.crop_size = (256, 512) # h, w -- Torch's transforms uses (h, w) format
         else:
             raise Exception('size not valid')
 
