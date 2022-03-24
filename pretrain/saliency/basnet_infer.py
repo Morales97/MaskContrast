@@ -66,8 +66,10 @@ def postprocess(model_output: np.array) -> np.array:
 if __name__ == '__main__':
 	# --------- 1. get image path and name ---------
 	
-	image_dir = '../data/cityscapes/leftImg8bit_tiny/'
-	save_dir = '../data/cityscapes/saliency_basnet/'
+	#image_dir = '../data/cityscapes/leftImg8bit_tiny/'
+	image_dir = '../data/gta5/images_tiny/'
+	#save_dir = '../data/cityscapes/saliency_basnet/'
+	save_dir = '../data/gta5/saliency_basnet/'
 	model_dir = './basnet.pth'
 	
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -95,15 +97,12 @@ if __name__ == '__main__':
 
 		image = Variable(image)
 		out = net(image)
-		#pred = d1[:,0,:,:]
-		
-		# normalization
-		#pred = normPRED(pred)
+
 		mask = postprocess(out)
 		if mask is None:
 			continue
 
 		# save
-		folder, name = dataset.get_img_save_path(data['index'])
-		save_output(os.path.join(save_dir, folder), name, mask)
+		name = dataset.get_img_save_path(data['index'])
+		save_output(save_dir, name, mask)
 	
