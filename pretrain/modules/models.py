@@ -71,7 +71,7 @@ class ContrastiveSegmentationModel_LRASPP(nn.Module):
         input_shape = x.shape[-2:]
         x = self.backbone(x)
         x = self.decoder(x)
-        pdb.set_trace()
+
         # Upsample to input resolution
         if self.upsample: 
             x['out'] = F.interpolate(x['out'], size=input_shape, mode='bilinear', align_corners=False)
