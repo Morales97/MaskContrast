@@ -97,10 +97,10 @@ def train_two_datasets(p, train_loader, train_loader_2, model, optimizer, epoch,
     data_iter_1 = iter(train_loader)
     data_iter_2 = iter(train_loader_2)
 
-    step = 0
+    i = 0
     while True:
-        step += 1
-        if step % len(data_iter_1) == 0 or step % len(data_iter_2) == 0:
+        i += 1
+        if i % len(data_iter_1) == 0 or i % len(data_iter_2) == 0:
             # if reached end of a dataloader, finish epoch
             # TODO check that this condition does not leave last batch unused
             break
