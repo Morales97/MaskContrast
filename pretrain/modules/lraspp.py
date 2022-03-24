@@ -55,7 +55,6 @@ def get_backbone_lraspp_mobilenetv3(pretrained=True):
     modify MobileNetV3 backbone so it can be attached to LR-ASPP head
     based on torch's implementation
     '''
-    import torchvision.mobilenetv3 as mobilenetv3
     backbone = mobilenetv3.mobilenet_v3_large(pretrained=pretrained, dilated=True)
     
     backbone = backbone.features
