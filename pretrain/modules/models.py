@@ -61,7 +61,7 @@ class ContrastiveSegmentationModel_LRASPP(nn.Module):
     Need a custom class for the case of using LRASPP: cannot get the head as simply the last decoder layer
     '''
     def __init__(self, backbone, decoder, upsample):
-        super(ContrastiveSegmentationModel, self).__init__()
+        super(ContrastiveSegmentationModel_LRASPP, self).__init__()
         self.backbone = backbone
         self.decoder = decoder
         self.upsample = upsample
@@ -76,6 +76,6 @@ class ContrastiveSegmentationModel_LRASPP(nn.Module):
         if self.upsample: 
             x['out'] = F.interpolate(x['out'], size=input_shape, mode='bilinear', align_corners=False)
             x['sal'] = F.interpolate(x['sal'], size=input_shape, mode='bilinear', align_corners=False)
-            
+
         return x['out'], x['sal'].squeeze()
 
