@@ -110,11 +110,20 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
     # Transforms 
     train_transform = get_train_transformations()
     print(train_transform)
-    train_dataset = DatasetKeyQuery(get_train_dataset(p, transform = None), train_transform, 
-                                downsample_sal=not p['model_kwargs']['upsample'])
+    train_dataset = DatasetKeyQuery(get_train_dataset(p, transform=None), 
+                                    train_transform, 
+                                    downsample_sal=not p['model_kwargs']['upsample'])
     train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=p['train_batch_size'], shuffle=True, num_workers=p['num_workers'])
-    print(colored('Train samples %d' %(len(train_dataset)), 'yellow'))
+    print(colored('Train samples %d for %s' % (len(train_dataset), p['train_db_name']), 'yellow'))
     print(colored(train_dataset, 'yellow'))
+
+    if p['train_db2_name'] is not None:
+        train_dataset_2 = DatasetKeyQuery(get_train_dataset(p, transform=None, dataset=p['train_db2_name']), 
+                                        train_transform, 
+                                        downsample_sal=not p['model_kwargs']['upsample'])
+        train_dataloader_2 = torch.utils.data.DataLoader(train_datase_2, batch_size=p['train_batch_size'], shuffle=True, num_workers=p['num_workers'])
+        print(colored('Train samples %d for %s' % (len(train_dataset_2), p['train_db2_name']), 'yellow'))
+        print(colored(train_dataset_2, 'yellow'))
 
     # Resume from checkpoint
     if p['load_checkpoint'] and os.path.exists(p['checkpoint']):

@@ -6,8 +6,11 @@
 train_db_name: cityscapes
 train_db_kwargs:
    saliency: saliency_basnet_tiny
+train_db2_name: gta5
+train_db2_kwargs:
+   saliency: saliency_basnet_tiny
 num_workers: 8
-train_batch_size: 64
+train_batch_size: 32
 
 # Model
 backbone: mobilenetv3
@@ -15,7 +18,7 @@ backbone_kwargs:  # not uset
    dilated: True
    pretraining: imagenet_classification  
 model_kwargs:
-   ndim: 19
+   ndim: 32
    head: linear   # not used
    upsample: True
    use_classification_head: True # not used

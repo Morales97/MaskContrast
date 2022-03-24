@@ -99,19 +99,22 @@ def get_model(p):
         raise ValueError('Invalid backbone {}'.format(p['backbone']))
 
 
-def get_train_dataset(p, transform=None):
-    if p['train_db_name'] == 'VOCSegmentation':
+def get_train_dataset(p, transform=None, dataset=None):
+    if dataset is None:
+        dataset = p['train_db_name']
+
+    if dataset == 'VOCSegmentation':
         from data.dataloaders.pascal_voc import VOCSegmentation
-        return VOCSegmentation(root=Path.db_root_dir(p['train_db_name']),
+        return VOCSegmentation(root=Path.db_root_dir(dataset),
                             saliency=p['train_db_kwargs']['saliency'],
                             transform=transform)
     
-    if p['train_db_name'] == 'cityscapes':
+    if dataset == 'cityscapes':
         from data.dataloaders.cityscapes import Cityscapes
         return Cityscapes(transform=transform)
 
     else:    
-        raise ValueError('Invalid train db name {}'.format(p['train_db_name']))   
+        raise ValueError('Invalid train db name {}'.format(dataset))   
  
 
 def get_train_dataloader(p, dataset):

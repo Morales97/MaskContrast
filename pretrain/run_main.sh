@@ -17,5 +17,5 @@
 #python main_single_thread.py --expt_name=test --config_env configs/env.yml --config_exp configs/cityscapes.yml
 
 #cityscapes lraspp
-python main_single_thread.py --expt_name=CS_mn_lraspp --config_env configs/env.yml --config_exp configs/cityscapes_lraspp.yml
+python main_single_thread.py --expt_name=CS_mn_lraspp_ndim_19 --config_env configs/env.yml --config_exp configs/cityscapes_lraspp.yml
 
