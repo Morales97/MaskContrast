@@ -113,6 +113,10 @@ def get_train_dataset(p, transform=None, dataset=None):
         from data.dataloaders.cityscapes import Cityscapes
         return Cityscapes(transform=transform)
 
+    if dataset == 'gta5':
+        from data.dataloaders.gta import Gta
+        return Gta(transform=transform)
+
     else:    
         raise ValueError('Invalid train db name {}'.format(dataset))   
  
