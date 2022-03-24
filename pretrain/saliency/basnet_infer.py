@@ -107,6 +107,7 @@ if __name__ == '__main__':
 		image = image.type(torch.FloatTensor).to(device)
 
 		image = Variable(image)
+		pdb.set_trace()
 		out = net(image)
 
 		mask = postprocess(out)
