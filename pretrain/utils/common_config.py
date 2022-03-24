@@ -45,13 +45,13 @@ def get_model(p):
 
     # MobileNetV3
     if p['backbone'] == 'mobilenetv3':
-        import modules.lraspp
-        backbone, low_ch, high_ch = get_backbone_lraspp_mobilenetv3()
+        import modules.lraspp as lraspp
+        backbone, low_ch, high_ch = lraspp.get_backbone_lraspp_mobilenetv3()
 
         # Get head
         if p['head'] == 'LR-ASPP':
             out_dim = p['model_kwargs']['ndim']
-            decoder = LRASPPHead_with_saliency(low_ch, high_ch, out_dim)
+            decoder = lraspp.LRASPPHead_with_saliency(low_ch, high_ch, out_dim)
         else:
             raise ValueError('Invalid head {}'.format(p['head']))
 
