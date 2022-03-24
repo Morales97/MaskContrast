@@ -55,6 +55,7 @@ def get_model(p):
         else:
             raise ValueError('Invalid head {}'.format(p['head']))
 
+        # Compose model
         from modules.models import ContrastiveSegmentationModel_LRASPP
         return ContrastiveSegmentationModel_LRASPP(backbone, decoder, p['model_kwargs']['upsample'])
 
@@ -88,14 +89,14 @@ def get_model(p):
         else:
             raise ValueError('Invalid head {}'.format(p['head']))
 
+        # Compose model from backbone and decoder
+        from modules.models import ContrastiveSegmentationModel
+        return ContrastiveSegmentationModel(backbone, decoder, p['model_kwargs']['head'], 
+                                                    p['model_kwargs']['upsample'], 
+                                                    p['model_kwargs']['use_classification_head'])
+    
     else:
         raise ValueError('Invalid backbone {}'.format(p['backbone']))
-
-    # Compose model from backbone and decoder
-    from modules.models import ContrastiveSegmentationModel
-    return ContrastiveSegmentationModel(backbone, decoder, p['model_kwargs']['head'], 
-                                                p['model_kwargs']['upsample'], 
-                                                p['model_kwargs']['use_classification_head'])
 
 
 def get_train_dataset(p, transform=None):

@@ -43,7 +43,6 @@ class ContrastiveSegmentationModel(nn.Module):
             sal = self.classification_head(embedding)
 
         # Upsample to input resolution
-        pdb.set_trace()
         if self.upsample: 
             x = F.interpolate(x, size=input_shape, mode='bilinear', align_corners=False)
             if self.use_classification_head:
@@ -72,11 +71,11 @@ class ContrastiveSegmentationModel_LRASPP(nn.Module):
         input_shape = x.shape[-2:]
         x = self.backbone(x)
         x = self.decoder(x)
-
+        pdb.set_trace()
         # Upsample to input resolution
         if self.upsample: 
             x['out'] = F.interpolate(x['out'], size=input_shape, mode='bilinear', align_corners=False)
             x['sal'] = F.interpolate(x['sal'], size=input_shape, mode='bilinear', align_corners=False)
-
+            
         return x['out'], x['sal'].squeeze()
 
