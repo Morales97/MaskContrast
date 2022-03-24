@@ -17,7 +17,7 @@ import pdb
 from PIL import Image
 import glob
 from tqdm import tqdm
-from data_loader import cityscapesDataset
+from data_loader import cityscapesDataset, gtaDataset
 import cv2
 import numpy as np
 from copy import deepcopy
@@ -64,12 +64,20 @@ def postprocess(model_output: np.array) -> np.array:
 	return mask
 
 if __name__ == '__main__':
+
+	_gta = True
+	_cityscapes = False
+
 	# --------- 1. get image path and name ---------
 	
-	#image_dir = '../data/cityscapes/leftImg8bit_tiny/'
-	image_dir = '../data/gta5/images_tiny/'
-	#save_dir = '../data/cityscapes/saliency_basnet/'
-	save_dir = '../data/gta5/saliency_basnet/'
+	if _cityscapes:
+		image_dir = '../data/cityscapes/leftImg8bit_tiny/'
+		save_dir = '../data/cityscapes/saliency_basnet/'
+	elif _gta:
+		image_dir = '../data/gta5/images_tiny/'
+		save_dir = '../data/gta5/saliency_basnet/'
+	else:
+		raise Exception('no dataset specified')
 	model_dir = './basnet.pth'
 	
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -77,7 +85,10 @@ if __name__ == '__main__':
 	# --------- 2. dataloader ---------
 	#1. dataload
 	transform = transforms.Compose([transforms.ToTensor()])
-	dataset = cityscapesDataset(image_path=image_dir, transform=transform)
+	if _cityscapes:
+		dataset = cityscapesDataset(image_path=image_dir, transform=transform)
+	elif _gta:
+		dataset = gtaDataset(image_path=image_dir, transform=transform)
 	dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
 	
 	# --------- 3. model define ---------
