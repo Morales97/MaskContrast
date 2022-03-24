@@ -47,7 +47,8 @@ class LRASPPHead_with_saliency(nn.Module):
 
         out = self.low_classifier(low) + self.high_classifier(x)
         sal = self.low_classifier_saliency(low) + self.high_classifier_saliency(x)
-        return out, sal
+        x = {'out': out, 'sal': sal}
+        return x
 
 
 def get_backbone_lraspp_mobilenetv3(pretrained=True):
