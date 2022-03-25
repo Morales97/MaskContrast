@@ -10,7 +10,7 @@ train_db2_name: gta5
 train_db2_kwargs:
    saliency: saliency_basnet_tiny
 num_workers: 8
-train_batch_size: 64
+train_batch_size: 32
 
 # Model
 backbone: resnet50
