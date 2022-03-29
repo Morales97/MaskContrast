@@ -28,7 +28,7 @@ def recursive_glob(rootdir=".", suffix=""):
 class Gta(data.Dataset):
 
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/gta5',     #TODO change to use data.util.mypath as in VOCSegmentation
-                 saliency='saliency_basnet_tiny', split='images_tiny', n_samples=-1,
+                 saliency='saliency_basnet_cropped', split='images_tiny_cropped', n_samples=-1,
                  transform=None, overfit=False):
         super(Gta, self).__init__()
 
@@ -37,7 +37,7 @@ class Gta(data.Dataset):
         self.split = split
 
         self.images_dir = os.path.join(self.root, self.split)
-        valid_saliency = ['saliency_basnet_tiny']
+        valid_saliency = ['saliency_basnet_cropped']
         assert(saliency in valid_saliency)
         self.saliency = saliency
         self.sal_dir = os.path.join(self.root, self.saliency)
