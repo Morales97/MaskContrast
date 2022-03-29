@@ -61,6 +61,9 @@ parser.add_argument('--entity', type=str, default='morales97',
 parser.add_argument('--expt_name', type=str, default='',
                     help='Name of the experiment for wandb')
 
+parser.add_argument('--save_interval', default=20, type=int,
+                    help='interval of epochs to save a checkpoint')
+
 def main():
     args = parser.parse_args()
     args.multiprocessing_distributed = False
@@ -162,20 +165,21 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
             eval_train = train_two_datasets(p, train_dataloader, train_dataloader_2, model, optimizer, epoch, amp, wandb)
 
         # Checkpoint
-        print('Checkpoint ...')
-        if args.nvidia_apex:
-            torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(),
-                        'amp': amp.state_dict(), 'epoch': epoch + 1}, 
-                        p['checkpoint'])
+        if epoch+1 % args.save_interval == 0:
+            print('Checkpoint ...')
+            if args.nvidia_apex:
+                torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(),
+                            'amp': amp.state_dict(), 'epoch': epoch + 1}, 
+                            p['checkpoint'])
 
-        else:
-            torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(), 
-                        'epoch': epoch + 1}, 
-                        p['checkpoint'])
+            else:
+                torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(), 
+                            'epoch': epoch + 1}, 
+                            p['checkpoint'])
 
-        model_artifact = wandb.Artifact('checkpoint_{}'.format(epoch), type='model')
-        model_artifact.add_file(p['checkpoint'])
-        wandb.log_artifact(model_artifact)
+            model_artifact = wandb.Artifact('checkpoint_{}'.format(epoch), type='model')
+            model_artifact.add_file(p['checkpoint'])
+            wandb.log_artifact(model_artifact)
 
 if __name__ == "__main__":
     main()

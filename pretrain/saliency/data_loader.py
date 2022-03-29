@@ -111,7 +111,6 @@ class gtaDataset(Dataset):
             self.img_size = (1280, 720) 
         elif size == "tiny":
             self.img_size = (640, 360)  # w, h -- PIL uses (w, h) format
-            self.crop_size = (256, 512) # h, w -- Torch's transforms uses (h, w) format
         else:
             raise Exception('size not valid')
 
@@ -146,11 +145,9 @@ class gtaDataset(Dataset):
             
         # Image
         img = pil_loader(img_path, self.img_size[0], self.img_size[1])
-        i, j, h, w = torchvision.transforms.RandomCrop.get_params(img, self.crop_size)
-        img = TF.crop(img, i, j, h, w)
         img = self.transforms(img)
 
-        lbl = np.zeros((512, 256))
+        lbl = np.zeros(self.img_size)
         sample = {'image': img, 'label': lbl, 'index': index}
 
         return sample
