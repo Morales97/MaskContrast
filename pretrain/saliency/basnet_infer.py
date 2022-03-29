@@ -11,6 +11,7 @@ import torchvision
 from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as F
+import torchvision.transforms.functional as TF
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 import pdb
@@ -32,6 +33,11 @@ def save_output(save_dir, save_name, mask):
 	save_path = os.path.join(save_dir, save_name) + '.png'
 	im.save(save_path)
 
+def save_img(save_dir, save_name, img):
+	os.makedirs(save_dir, exist_ok=True)
+
+	save_path = os.path.join(save_dir, save_name) + '.jpg'
+	torchvision.utils.save_img(img, save_path)
 
 def postprocess(model_output: np.array) -> np.array:
 	"""
@@ -75,7 +81,8 @@ if __name__ == '__main__':
 		save_dir = '../data/cityscapes/saliency_basnet/'
 	elif _gta:
 		image_dir = '../data/gta5/images_tiny/'
-		save_dir = '../data/gta5/saliency_basnet/'
+		img_save_dir = '../data/gta5/images_tiny_cropped/'
+		save_dir = '../data/gta5/saliency_basnet_cropped/'
 	else:
 		raise Exception('no dataset specified')
 	model_dir = './basnet.pth'
@@ -116,4 +123,9 @@ if __name__ == '__main__':
 		# save
 		name = dataset.get_img_save_path(data['index'])
 		save_output(save_dir, name, mask)
+		if _gta:
+			i, j, h, w = data['crop']
+			image = TF.crop(image, i, j, h, w)
+			save_img()
+
 	
