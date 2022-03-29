@@ -151,6 +151,6 @@ class gtaDataset(Dataset):
         img = self.transforms(img)
 
         lbl = np.zeros(self.img_size)
-        sample = {'image': img, 'label': lbl, 'index': index, 'crop': (i, j, h, w)}
+        sample = {'image': img, 'label': lbl, 'index': index}
 
         return sample

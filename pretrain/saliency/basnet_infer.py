@@ -124,8 +124,6 @@ if __name__ == '__main__':
 		name = dataset.get_img_save_path(data['index'])
 		save_output(save_dir, name, mask)
 		if _gta:
-			i, j, h, w = data['crop']
-			image = TF.crop(image, i, j, h, w)
 			save_img(img_save_dir, name, image)
 
 	
