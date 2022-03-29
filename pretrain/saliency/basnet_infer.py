@@ -37,7 +37,7 @@ def save_img(save_dir, save_name, img):
 	os.makedirs(save_dir, exist_ok=True)
 
 	save_path = os.path.join(save_dir, save_name) + '.jpg'
-	torchvision.utils.save_img(img, save_path)
+	torchvision.utils.save_image(img, save_path)
 
 def postprocess(model_output: np.array) -> np.array:
 	"""
