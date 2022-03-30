@@ -144,7 +144,7 @@ class Cityscapes_Mix(data.Dataset):
         assert(saliency in valid_saliency) and (saliency_gt in valid_saliency)
         self.saliency = saliency
         self.sal_dir = os.path.join(self.root, self.saliency)
-        self.masks_sup_dir = os.path.join(self.root, self.saliency_gt)
+        self.masks_sup_dir = os.path.join(self.root, saliency_gt)
     
         self.images = []
         self.sal = []
