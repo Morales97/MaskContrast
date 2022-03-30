@@ -114,7 +114,7 @@ def get_train_dataset(p, transform=None, dataset=None, use_gt_masks=False):
         if use_gt_masks:
             return Cityscapes_Mix(transform=transform, n_samples_lbld=p['train_db_kwargs']['n_gt_images'])
         else:
-            return Cityscapes(transform=transform)
+            return Cityscapes(transform=transform, n_samples=100)
 
     if dataset == 'gta5':
         from data.dataloaders.gta import Gta
