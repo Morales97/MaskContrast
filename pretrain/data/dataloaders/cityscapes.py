@@ -164,7 +164,7 @@ class Cityscapes_Mix(data.Dataset):
             masks = sorted(recursive_find_masks(os.path.join(self.masks_sup_dir, city), sal_name))
             if len(masks) > 0:
                 i += 1
-                self.images.append(img_path * len(masks)) # add the images once for each mask
+                self.images = self.images + (img_path * len(masks)) # add the images once for each mask
                 self.sal = self.sal + masks
         print("Step 1. Found %d images with %d ground-truth object masks" % (i, len(self.sal)))
 
