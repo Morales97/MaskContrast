@@ -35,7 +35,7 @@ def save_img(save_dir, save_name, img):
 	save_path = os.path.join(save_dir, save_name) + '.jpg'
 	torchvision.utils.save_image(img, save_path)
 
-def postprocess(model_output: np.array) -> np.array:
+def postprocess(model_output: np.array, area_th=0.01) -> np.array:
 	"""
 	adapted from https://github.com/wvangansbeke/Unsupervised-Semantic-Segmentation/tree/main/saliency 
 	We postprocess the predicted saliency mask to remove very small segments. 
@@ -56,7 +56,7 @@ def postprocess(model_output: np.array) -> np.array:
 		segment_mask = np.zeros((mask.shape[0], mask.shape[1]), dtype=np.uint8)
 		segment_mask = cv2.drawContours(segment_mask, [contour], 0, 255, thickness=cv2.FILLED)
 		area = (np.sum(segment_mask) / 255.0) / np.prod(segment_mask.shape)
-		if area < 0.01:
+		if area < area_th:
 			mask[segment_mask == 255] = 0
 
 	# If area of mask is too small, return None
@@ -107,12 +107,11 @@ if __name__ == '__main__':
 		top_classes = lbl_class[top_idxs]            # get class from idx
 
 		masks = []
-		pdb.set_trace()
 		for top_class in top_classes:
 			if top_class != ignore_index:
 				#mask = (lbl == top_class) * top_class   # generates mask with index of the class
 				mask = (lbl == top_class) * 1            # generates mask with 0 and 1
-				mask = postprocess(mask)
+				mask = postprocess(mask, area_th=0)		 # area_th set at 0 to not throw away small segments
 				if mask is None:
 					continue
 				masks.append(mask)
