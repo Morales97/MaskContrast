@@ -29,6 +29,11 @@ def recursive_glob(rootdir=".", suffix=""):
         if filename.endswith(suffix)
     ]
 
+def _build_size(orig_img, width, height):
+    size = [width, height]
+    if size[0] == -1: size[0] = orig_img.width
+    if size[1] == -1: size[1] = orig_img.height
+    return size
 
 def pil_loader(_path, width, height, is_segmentation=False):
     # open path as file to avoid ResourceWarning
