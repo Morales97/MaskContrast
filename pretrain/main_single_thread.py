@@ -109,7 +109,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
 
     # Dataset
     print(colored('Retrieve dataset', 'blue'))
-    '''
+    
     # Transforms 
     train_transform = get_train_transformations()
     print(train_transform)
@@ -127,7 +127,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
         train_dataloader_2 = torch.utils.data.DataLoader(train_dataset_2, batch_size=p['train_batch_size'], shuffle=True, num_workers=p['num_workers'])
         print(colored('Train samples %d for %s' % (len(train_dataset_2), p['train_db2_name']), 'yellow'))
         print(colored(train_dataset_2, 'yellow'))
-    '''
+    
     # Resume from checkpoint
     if p['load_checkpoint'] and os.path.exists(p['checkpoint']):
         print(colored('Restart from checkpoint {}'.format(p['checkpoint']), 'blue'))
@@ -154,7 +154,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
         # Adjust lr
         lr = adjust_learning_rate(p, optimizer, epoch)
         print('Adjusted learning rate to {:.5f}'.format(lr))
-        '''
+        
         # Train 
         print('Train ...')
         # Use one dataset
@@ -163,12 +163,10 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
         # Use two datasets
         else:
             eval_train = train_two_datasets(p, train_dataloader, train_dataloader_2, model, optimizer, epoch, amp, wandb)
-        '''
+        
         # Checkpoint
         print(epoch)
-        pdb.set_trace()
-        if epoch+1 % args.save_interval == 0:
-            pdb.set_trace()
+        if (epoch+1) % args.save_interval == 0:
             print('Checkpoint ...')
             if args.nvidia_apex:
                 torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(),
