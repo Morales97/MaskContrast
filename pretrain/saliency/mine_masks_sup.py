@@ -107,6 +107,7 @@ if __name__ == '__main__':
 		top_classes = lbl_class[top_idxs]            # get class from idx
 
 		masks = []
+		pdb.set_trace()
 		for top_class in top_classes:
 			if top_class != ignore_index:
 				#mask = (lbl == top_class) * top_class   # generates mask with index of the class
@@ -127,6 +128,6 @@ if __name__ == '__main__':
 			save_path = save_dir
 		
 		for i, mask in enumerate(masks):
-			save_output(save_path, name + '_' + str(i), mask)
+			#save_output(save_path, name + '_' + str(i), mask)
 
 	
