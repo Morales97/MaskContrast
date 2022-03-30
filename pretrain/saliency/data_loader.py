@@ -46,6 +46,7 @@ def pil_loader(_path, width, height, is_segmentation=False):
                 _img = _img.convert('RGB')
     return _img
 
+
 class cityscapesDataset(Dataset):
     def __init__(
         self,
@@ -67,10 +68,37 @@ class cityscapesDataset(Dataset):
             raise Exception('size not valid')
 
         self.n_samples = n_samples
+        self.n_classes = 19
         self.files = {}
         self.transforms = transform
         self.images_base = os.path.join(self.image_path, self.split)
         self.annotations_base = os.path.join(self.label_path, self.split)
+
+
+        self.void_classes = [0, 1, 2, 3, 4, 5, 6, 9, 10, 14, 15, 16, 18, 29, 30, 34, -1]
+        self.valid_classes = [
+            7,
+            8,
+            11,
+            12,
+            13,
+            17,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            31,
+            32,
+            33,
+        ]
+        self.ignore_index = 250
+        self.class_map = dict(zip(self.valid_classes, range(19)))
 
         self.files[split] = sorted(recursive_glob(rootdir=self.images_base, suffix=".jpg"))
         if self.n_samples >= 0:
@@ -108,8 +136,29 @@ class cityscapesDataset(Dataset):
                 img_path.split(os.sep)[-2],
                 os.path.basename(img_path)[:-15] + "gtFine_labelIds.png")
             lbl = pil_loader(lbl_path, self.img_size[0], self.img_size[1], is_segmentation=True)
+            lbl = self.encode_segmap(np.array(lbl, dtype=np.uint8))
+
         sample = {'image': img, 'label': lbl, 'index': index}
         return sample
+
+    def encode_segmap(self, mask):
+        # Put all void classes to zero
+        for _voidc in self.void_classes:
+            mask[mask == _voidc] = self.ignore_index
+        for _validc in self.valid_classes:
+            mask[mask == _validc] = self.class_map[_validc]
+        
+        # sanity checks
+        lbl = mask
+        classes = np.unique(lbl)
+        lbl = lbl.astype(int)
+        if not np.all(classes == np.unique(lbl)):
+            print("WARN: resizing labels yielded fewer classes")
+        if not np.all(np.unique(lbl[lbl != self.ignore_index]) < self.n_classes):
+            print("after det", classes, np.unique(lbl))
+            raise ValueError("Segmentation map contained invalid class values")
+        lbl = torch.from_numpy(lbl).long()
+        return lbl
 
 
 class gtaDataset(Dataset):
