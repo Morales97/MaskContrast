@@ -128,6 +128,6 @@ if __name__ == '__main__':
 		if _gta:
 			save_img(img_save_dir, name, image)
 			save_path = save_dir
-		save_output(save_dir, name, mask)
+		# save_output(save_dir, name, mask)
 
 	
