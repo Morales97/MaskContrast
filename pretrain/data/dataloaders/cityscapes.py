@@ -157,12 +157,14 @@ class Cityscapes_Mix(data.Dataset):
         self.files_gt = self.files[:self.n_samples]
         self.files_est = self.files[self.n_samples:]
 
-        # TODO add images and sal paths for mined masks
         for img_path in self.files_gt:
             city = img_path.split(os.sep)[-2]
             sal_name = img_path.split(os.sep)[-1].rstrip('.jpg')
             masks = sorted(recursive_find_masks(os.path.join(self.masks_sup_dir, city), sal_name))
-            pdb.set_trace()
+            if len(masks) > 0:
+                self.images.append(img_path)
+                self.sal = self.sal + masks
+        pdb.set_trace()
 
         for img_path in self.files_est:
             city = img_path.split(os.sep)[-2]
