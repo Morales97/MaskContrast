@@ -119,9 +119,13 @@ if __name__ == '__main__':
 
 		# save
 		name = dataset.get_img_save_path(data['index'])
-		pdb.set_trace()
-		save_output(save_dir, name, mask)
+		if _cityscapes:
+			city, name = img_path.split(os.sep)
+			save_dir = os.path.join(save_dir, city)
 		if _gta:
 			save_img(img_save_dir, name, image)
+		
+		pdb.set_trace()
+		save_output(save_dir, name, mask)
 
 	
