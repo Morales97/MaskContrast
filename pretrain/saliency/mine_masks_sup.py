@@ -100,7 +100,6 @@ if __name__ == '__main__':
 	for data in tqdm(dataloader):
 	
 		lbl = data['label']
-		pdb.set_trace()
 
 		lbl_class, lbl_count = lbl.unique(return_counts=True)   
 		top_count, top_idxs = lbl_count.topk(3)    # get top 3 class counts and idx
@@ -126,7 +125,6 @@ if __name__ == '__main__':
 			save_img(img_save_dir, name, image)
 			save_path = save_dir
 		
-		pdb.set_trace()
 		for i, mask in enumerate(masks):
 			save_output(save_path, name + '_' + str(i), mask)
 
