@@ -77,7 +77,7 @@ if __name__ == '__main__':
 	if _cityscapes:
 		image_dir = '../data/cityscapes/leftImg8bit_tiny/'
 		label_dir = '../data/cityscapes/gtFine'
-		save_dir = '../data/cityscapes/saliency_mined_masks/'
+		save_dir = '../data/cityscapes/saliency_mined_masks_all_classes/'
 	elif _gta:
 		image_dir = '../data/gta5/images_tiny/'
 		img_save_dir = '../data/gta5/images_tiny_cropped/'
@@ -103,7 +103,10 @@ if __name__ == '__main__':
 		lbl = data['label']
 
 		lbl_class, lbl_count = lbl.unique(return_counts=True)   
-		top_count, top_idxs = lbl_count.topk(top_k)   # get top k class counts and idx
+		if top_k = -1:
+			top_count, top_idxs = lbl_count.topk(len(lbl_class))   # get top k class counts and idx
+		else:
+			top_count, top_idxs = lbl_count.topk(top_k)   # get top k class counts and idx
 		top_classes = lbl_class[top_idxs]            # get class from idx
 
 		masks = []
