@@ -126,6 +126,7 @@ if __name__ == '__main__':
 			city, name = name.split(os.sep)
 			save_path = os.path.join(save_dir, city)
 		if _gta:
+			image = data['image'].type(torch.FloatTensor).to(device)
 			save_img(img_save_dir, name, image)
 			save_path = save_dir
 		
