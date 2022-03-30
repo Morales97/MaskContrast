@@ -207,7 +207,9 @@ class gtaDataset(Dataset):
             32,
             33,
         ]
-
+        self.ignore_index = 250
+        self.class_map = dict(zip(self.valid_classes, range(19)))
+        
         self.n_samples = n_samples
         self.files = {}
         self.transforms = transform
