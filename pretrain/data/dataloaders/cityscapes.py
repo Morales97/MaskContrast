@@ -25,6 +25,18 @@ def recursive_glob(rootdir=".", suffix=""):
         if filename.endswith(suffix)
     ]
 
+def recursive_find_masks(rootdir=".", rootname=""):
+    """Performs recursive glob with given suffix and rootdir
+        :param rootdir is the root directory
+        :param suffix is the suffix to be searched
+    """
+    return [
+        os.path.join(looproot, filename)
+        for looproot, _, filenames in os.walk(rootdir)
+        for filename in filenames
+        if filename.startswith(rootname)
+    ]
+
 class Cityscapes(data.Dataset):
 
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/cityscapes',     #TODO change to use data.util.mypath as in VOCSegmentation
@@ -110,6 +122,108 @@ class Cityscapes(data.Dataset):
         tar.close()
         os.chdir(cwd)
         print('Done!')
+
+
+
+class Cityscapes_Mix(data.Dataset):
+    '''
+    Mix masks obtained from saliency estimation with masks obtained from ground truth segmentation labels
+    '''
+
+    def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/cityscapes',     #TODO change to use data.util.mypath as in VOCSegmentation
+                 saliency='saliency_basnet_tiny', split='leftImg8bit_tiny/train', n_samples_lbld=-1,
+                 transform=None, overfit=False):
+        super(Cityscapes, self).__init__()
+
+        self.root = root
+        self.transform = transform
+        self.split = split
+        self.masks_sup_dir = '/home/danmoral/MaskContrast/pretrain/data/cityscapes/saliency_mined_masks'
+
+        self.images_dir = os.path.join(self.root, self.split)
+        valid_saliency = ['saliency_basnet_tiny']
+        assert(saliency in valid_saliency)
+        self.saliency = saliency
+        self.sal_dir = os.path.join(self.root, self.saliency)
+    
+        self.images = []
+        self.sal = []
+
+        self.n_samples = n_samples_lbld
+        self.files = sorted(recursive_glob(rootdir=self.images_dir, suffix=".jpg"))
+        if not self.files:
+            raise Exception("No files found in %s" % self.images_dir)
+
+        self.files_gt = self.files[:self.n_samples]
+        self.files_est = self.files[self.n_samples:]
+
+        # TODO add images and sal paths for mined masks
+        for img_path in self.files_gt:
+            city = img_path.split(os.sep)[-2]
+            sal_name = img_path.split(os.sep)[-1].rstrip('.jpg')
+            masks = sorted(recursive_find_masks(os.path.join(self.masks_sup_dir, city), sal_name))
+            pdb.set_trace()
+            
+        for img_path in self.files_est:
+            city = img_path.split(os.sep)[-2]
+            sal_name = img_path.split(os.sep)[-1].rstrip('.jpg') + '.png'
+            sal_path = os.path.join(self.sal_dir, city, sal_name)
+            if os.path.isfile(sal_path):
+                self.images.append(img_path)
+                self.sal.append(sal_path)
+        print("Found %d images with saliency map, out of %d total images" % (len(self.images), len(self.files)))
+
+
+
+        assert (len(self.images) == len(self.sal))
+
+        if overfit:
+            n_of = 32
+            self.images = self.images[:n_of]
+            self.sal = self.sal[:n_of]
+
+
+    def __getitem__(self, index):
+        sample = {}
+
+        sample['image'] = self._load_img(index)
+        sample['sal'] = self._load_sal(index)
+
+        if self.transform is not None:
+            sample = self.transform(sample)
+        
+        sample['meta'] = {'image': str(self.images[index])}
+
+        return sample
+
+    def __len__(self):
+            return len(self.images)
+
+    def _load_img(self, index):
+        _img = Image.open(self.images[index]).convert('RGB')
+        return _img
+
+    def _load_sal(self, index):
+        _sal = Image.open(self.sal[index])
+        return _sal
+
+    def __str__(self):
+        return 'VOCSegmentation(saliency=' + self.saliency + ')'
+
+    def get_class_names(self):
+        # Class names for sal
+        return ['background', 'salient object']
+    
+        # extract file
+        cwd = os.getcwd()
+        print('\nExtracting tar file')
+        tar = tarfile.open(_fpath)
+        os.chdir(Path.db_root_dir())
+        tar.extractall()
+        tar.close()
+        os.chdir(cwd)
+        print('Done!')
+
 
 import torchvision
 class RandomResizedCrop(torchvision.transforms.RandomResizedCrop):

@@ -8,7 +8,7 @@ train_db_kwargs:
    saliency: saliency_basnet_tiny
 train_db2_name: gta5
 train_db2_kwargs:
-   saliency: saliency_basnet_tiny
+   saliency: saliency_basnet_cropped
 num_workers: 8
 train_batch_size: 32
 

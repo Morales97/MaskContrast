@@ -70,6 +70,7 @@ if __name__ == '__main__':
 	_gta = False
 	_cityscapes = True
 	ignore_index = 250
+	top_k = 5
 
 	# --------- 1. get image path and name ---------
 	
@@ -102,7 +103,7 @@ if __name__ == '__main__':
 		lbl = data['label']
 
 		lbl_class, lbl_count = lbl.unique(return_counts=True)   
-		top_count, top_idxs = lbl_count.topk(3)    # get top 3 class counts and idx
+		top_count, top_idxs = lbl_count.topk(top_k)   # get top k class counts and idx
 		top_classes = lbl_class[top_idxs]            # get class from idx
 
 		masks = []

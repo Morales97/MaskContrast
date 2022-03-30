@@ -110,8 +110,9 @@ def get_train_dataset(p, transform=None, dataset=None):
                             transform=transform)
     
     if dataset == 'cityscapes':
-        from data.dataloaders.cityscapes import Cityscapes
-        return Cityscapes(transform=transform)
+        from data.dataloaders.cityscapes import Cityscapes, Cityscapes_Mix
+        return Cityscapes_Mix(transform=transform)
+        #return Cityscapes(transform=transform)
 
     if dataset == 'gta5':
         from data.dataloaders.gta import Gta
