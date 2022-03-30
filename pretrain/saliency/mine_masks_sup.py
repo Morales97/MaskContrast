@@ -70,14 +70,14 @@ if __name__ == '__main__':
 	_gta = False
 	_cityscapes = True
 	ignore_index = 250
-	top_k = -1 # 5
+	top_k = 5 # -1
 
 	# --------- 1. get image path and name ---------
 	
 	if _cityscapes:
 		image_dir = '../data/cityscapes/leftImg8bit_tiny/'
 		label_dir = '../data/cityscapes/gtFine'
-		save_dir = '../data/cityscapes/saliency_mined_masks_all_classes/'
+		save_dir = '../data/cityscapes/saliency_mined_masks/'
 	elif _gta:
 		image_dir = '../data/gta5/images_tiny/'
 		img_save_dir = '../data/gta5/images_tiny_cropped/'
