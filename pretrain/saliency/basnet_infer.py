@@ -26,7 +26,6 @@ from copy import deepcopy
 from model import BASNet
 
 def save_output(save_dir, save_name, mask):
-	pdb.set_trace()
 	os.makedirs(save_dir, exist_ok=True)
 
 	im = Image.fromarray(mask*255).convert('RGB')
@@ -123,9 +122,12 @@ if __name__ == '__main__':
 
 		# save
 		name = dataset.get_img_save_path(data['index'])
-		pdb.set_trace()
-		save_output(save_dir, name, mask)
+		if _cityscapes:
+			city, name = name.split(os.sep)
+			save_path = os.path.join(save_dir, city)
 		if _gta:
 			save_img(img_save_dir, name, image)
+			save_path = save_dir
+		save_output(save_dir, name, mask)
 
 	
