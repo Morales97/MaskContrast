@@ -67,8 +67,8 @@ def postprocess(model_output: np.array, area_th=0.01) -> np.array:
 
 if __name__ == '__main__':
 
-	_gta = False
-	_cityscapes = True
+	_gta = True
+	_cityscapes = False
 	ignore_index = 250
 	top_k = 5 # -1
 
@@ -80,7 +80,8 @@ if __name__ == '__main__':
 		save_dir = '../data/cityscapes/saliency_mined_masks/'
 	elif _gta:
 		image_dir = '../data/gta5/images_tiny/'
-		img_save_dir = '../data/gta5/images_tiny_cropped/'
+		label_dir = '../data/gta5/labels/'
+		img_save_dir = '../data/gta5/images_tiny_cropped_sup/'
 		save_dir = '../data/gta5/saliency_mined_masks_cropped/'
 	else:
 		raise Exception('no dataset specified')
@@ -94,7 +95,7 @@ if __name__ == '__main__':
 	if _cityscapes:
 		dataset = cityscapesDataset(image_path=image_dir, label_path=label_dir, transform=transform, n_samples=100)
 	elif _gta:
-		dataset = gtaDataset(image_path=image_dir, transform=transform)
+		dataset = gtaDataset(image_path=image_dir, label_path=label_dir, transform=transform, n_samples=100)
 	dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
 	
 	# --------- 3. mine object masks from segmentation labels ---------

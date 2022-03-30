@@ -168,12 +168,14 @@ class gtaDataset(Dataset):
     def __init__(
         self,
         image_path,
+        label_path=None,
         split="train",
         n_samples= -1,        # Select only few samples for training
         size="tiny",
 		transform=None
     ):
         self.image_path = image_path
+        self.label_path = label_path
         self.split = split
         if size == "small":
             self.img_size = (1280, 720) 
@@ -183,10 +185,34 @@ class gtaDataset(Dataset):
         else:
             raise Exception('size not valid')
 
+        self.void_classes = [0, 1, 2, 3, 4, 5, 6, 9, 10, 14, 15, 16, 18, 29, 30, 34, -1]
+        self.valid_classes = [
+            7,
+            8,
+            11,
+            12,
+            13,
+            17,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            31,
+            32,
+            33,
+        ]
+
         self.n_samples = n_samples
         self.files = {}
         self.transforms = transform
         self.images_base = self.image_path
+        self.annotations_base = self.label_path
 
         self.files[split] = sorted(recursive_glob(rootdir=self.images_base, suffix=".jpg"))
         if self.n_samples >= 0:
@@ -218,7 +244,34 @@ class gtaDataset(Dataset):
         img = TF.crop(img, i, j, h, w)
         img = self.transforms(img)
 
-        lbl = np.zeros(self.img_size)
-        sample = {'image': img, 'label': lbl, 'index': index}
+        if self.label_path is None:
+            lbl = np.zeros(self.img_size)
+        else:
+            lbl_path = os.path.join(
+                self.annotations_base,
+                img_path.split(os.sep)[-1][:-4] + ".png")
+            lbl = pil_loader(lbl_path, self.img_size[0], self.img_size[1], is_segmentation=True)
+            lbl = TF.crop(lbl, i, j, h, w)
+            lbl = self.encode_segmap(np.array(lbl, dtype=np.uint8))
 
+        sample = {'image': img, 'label': lbl, 'index': index}
         return sample
+
+    def encode_segmap(self, mask):
+        # Put all void classes to zero
+        for _voidc in self.void_classes:
+            mask[mask == _voidc] = self.ignore_index
+        for _validc in self.valid_classes:
+            mask[mask == _validc] = self.class_map[_validc]
+        
+        # sanity checks
+        lbl = mask
+        classes = np.unique(lbl)
+        lbl = lbl.astype(int)
+        if not np.all(classes == np.unique(lbl)):
+            print("WARN: resizing labels yielded fewer classes")
+        if not np.all(np.unique(lbl[lbl != self.ignore_index]) < self.n_classes):
+            print("after det", classes, np.unique(lbl))
+            raise ValueError("Segmentation map contained invalid class values")
+        lbl = torch.from_numpy(lbl).long()
+        return lbl
