@@ -74,6 +74,7 @@ if __name__ == '__main__':
 	
 	if _cityscapes:
 		image_dir = '../data/cityscapes/leftImg8bit_tiny/'
+		label_dir = '../data/cityscapes/'
 		save_dir = '../data/cityscapes/saliency_mined_masks/'
 	elif _gta:
 		image_dir = '../data/gta5/images_tiny/'

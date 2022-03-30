@@ -30,25 +30,29 @@ def recursive_glob(rootdir=".", suffix=""):
     ]
 
 
-def pil_loader(_path, width, height):
+def pil_loader(_path, width, height, is_segmentation=False):
     # open path as file to avoid ResourceWarning
     # (https://github.com/python-pillow/Pillow/issues/835)
     with open(_path, 'rb') as f:
         with Image.open(f) as _img:
-            _img = _img.convert('RGB')
-            #_img = _img.resize(_build_size(_img, width, height), Image.ANTIALIAS)
+            if is_segmentation:
+                _img = _img.resize(_build_size(_img, width, height), Image.NEAREST)
+            else:
+                _img = _img.convert('RGB')
     return _img
 
 class cityscapesDataset(Dataset):
     def __init__(
         self,
         image_path,
+        label_path=None,
         split="train",
         n_samples= -1,        # Select only few samples for training
         size="tiny",
 		transform=None
     ):
         self.image_path = image_path
+        self.label_path = label_path
         self.split = split
         if size == "small":
             self.img_size = (1024, 512) # w, h -- PIL uses (w, h) format
@@ -61,6 +65,7 @@ class cityscapesDataset(Dataset):
         self.files = {}
         self.transforms = transform
         self.images_base = os.path.join(self.image_path, self.split)
+        self.annotations_base = os.path.join(self.label_path, self.split)
 
         self.files[split] = sorted(recursive_glob(rootdir=self.images_base, suffix=".jpg"))
         if self.n_samples >= 0:
@@ -84,15 +89,22 @@ class cityscapesDataset(Dataset):
         """__getitem__
         :param index:
         """
-        img_path = self.files[self.split][index].rstrip()
-            
         # Image
+        img_path = self.files[self.split][index].rstrip()
         img = pil_loader(img_path, self.img_size[0], self.img_size[1])
         img = self.transforms(img)
 
-        lbl = np.zeros((512, 256))
-        sample = {'image': img, 'label': lbl, 'index': index}
+        # Label
+        if self.label_path is None:
+            lbl = np.zeros((512, 256))
+        else:
+            lbl_path = os.path.join(
+                self.annotations_base,
+                img_path.split(os.sep)[-2],
+                os.path.basename(img_path)[:-15] + "gtFine_labelIds.png")
+            lbl = pil_loader(lbl_path, self.img_size[0], self.img_size[1], is_segmentation=True)
 
+        sample = {'image': img, 'label': lbl, 'index': index}
         return sample
 
 
