@@ -131,20 +131,20 @@ class Cityscapes_Mix(data.Dataset):
     '''
 
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/cityscapes',     #TODO change to use data.util.mypath as in VOCSegmentation
-                 saliency='saliency_basnet_tiny', split='leftImg8bit_tiny/train', n_samples_lbld=-1,
+                 saliency='saliency_basnet_tiny', saliency_gt='saliency_mined_masks', split='leftImg8bit_tiny/train', n_samples_lbld=-1,
                  transform=None, overfit=False):
         super(Cityscapes_Mix, self).__init__()
 
         self.root = root
         self.transform = transform
         self.split = split
-        self.masks_sup_dir = '/home/danmoral/MaskContrast/pretrain/data/cityscapes/saliency_mined_masks'
 
         self.images_dir = os.path.join(self.root, self.split)
-        valid_saliency = ['saliency_basnet_tiny']
-        assert(saliency in valid_saliency)
+        valid_saliency = ['saliency_basnet_tiny', 'saliency_mined_masks']
+        assert(saliency in valid_saliency) and (saliency_gt in valid_saliency)
         self.saliency = saliency
         self.sal_dir = os.path.join(self.root, self.saliency)
+        self.masks_sup_dir = os.path.join(self.root, self.saliency_gt)
     
         self.images = []
         self.sal = []
@@ -165,19 +165,19 @@ class Cityscapes_Mix(data.Dataset):
                 self.images.append(img_path)
                 self.sal = self.sal + masks
         pdb.set_trace()
+        print("Step 1. Found %d images with %d ground-truch object masks" % (len(self.images), len(self.sal)))
 
+        i = 0
         for img_path in self.files_est:
             city = img_path.split(os.sep)[-2]
             sal_name = img_path.split(os.sep)[-1].rstrip('.jpg') + '.png'
             sal_path = os.path.join(self.sal_dir, city, sal_name)
             if os.path.isfile(sal_path):
+                i += 1
                 self.images.append(img_path)
                 self.sal.append(sal_path)
-        print("Found %d images with saliency map, out of %d total images" % (len(self.images), len(self.files)))
+        print("Step 2. Found %d images with an estiamted object mask, out of %d total images" % (i, len(self.files_est)))
 
-
-
-        assert (len(self.images) == len(self.sal))
 
         if overfit:
             n_of = 32

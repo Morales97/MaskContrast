@@ -6,6 +6,8 @@
 train_db_name: cityscapes
 train_db_kwargs:
    saliency: saliency_basnet_tiny
+   use_gt_masks: True
+   saliency_gt: saliency_mined_masks
 train_db2_name: null
 train_db2_kwargs:
    saliency: null

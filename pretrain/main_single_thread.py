@@ -113,7 +113,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
     # Transforms 
     train_transform = get_train_transformations()
     print(train_transform)
-    train_dataset = DatasetKeyQuery(get_train_dataset(p, transform=None), 
+    train_dataset = DatasetKeyQuery(get_train_dataset(p, transform=None, use_gt_masks=p['use_gt_masks']), 
                                     train_transform, 
                                     downsample_sal=not p['model_kwargs']['upsample'])
     train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=p['train_batch_size'], shuffle=True, num_workers=p['num_workers'])

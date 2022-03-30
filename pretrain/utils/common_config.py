@@ -99,7 +99,7 @@ def get_model(p):
         raise ValueError('Invalid backbone {}'.format(p['backbone']))
 
 
-def get_train_dataset(p, transform=None, dataset=None):
+def get_train_dataset(p, transform=None, dataset=None, use_gt_masks=False):
     if dataset is None:
         dataset = p['train_db_name']
 
@@ -111,8 +111,10 @@ def get_train_dataset(p, transform=None, dataset=None):
     
     if dataset == 'cityscapes':
         from data.dataloaders.cityscapes import Cityscapes, Cityscapes_Mix
-        return Cityscapes_Mix(transform=transform)
-        #return Cityscapes(transform=transform)
+        if use_gt_masks:
+            return Cityscapes_Mix(transform=transform)
+        else:
+            return Cityscapes(transform=transform)
 
     if dataset == 'gta5':
         from data.dataloaders.gta import Gta
