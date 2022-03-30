@@ -111,11 +111,11 @@ if __name__ == '__main__':
 			if top_class != 0 and top_class != ignore_index:
 				#mask = (lbl == top_class) * top_class   # generates mask with index of the class
 				mask = (lbl == top_class) * 1            # generates mask with 0 and 1
+				mask = postprocess(mask)
+				if mask is None:
+					continue
 				masks.append(mask)
 
-		mask = postprocess(mask)
-		if mask is None:
-			continue
 
 		# save
 		name = dataset.get_img_save_path(data['index'])
@@ -126,6 +126,7 @@ if __name__ == '__main__':
 			save_img(img_save_dir, name, image)
 		
 		pdb.set_trace()
-		save_output(save_dir, name, mask)
+		for i, mask in enumerate(masks):
+			save_output(save_dir, name + '_i', mask)
 
 	
