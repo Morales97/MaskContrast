@@ -113,7 +113,7 @@ if __name__ == '__main__':
 				mask = (lbl == top_class) * 1            # generates mask with 0 and 1
 				masks.append(mask)
 
-		mask = postprocess(out)
+		mask = postprocess(mask)
 		if mask is None:
 			continue
 
