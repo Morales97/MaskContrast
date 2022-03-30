@@ -116,7 +116,6 @@ if __name__ == '__main__':
 					continue
 				masks.append(mask)
 
-
 		# save
 		name = dataset.get_img_save_path(data['index'])
 		if _cityscapes:
@@ -127,6 +126,6 @@ if __name__ == '__main__':
 			save_path = save_dir
 		
 		for i, mask in enumerate(masks):
-			pass#save_output(save_path, name + '_' + str(i), mask)
+			save_output(save_path, name + '_' + str(i), mask)
 
 	
