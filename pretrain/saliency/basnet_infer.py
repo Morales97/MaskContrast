@@ -26,6 +26,7 @@ from copy import deepcopy
 from model import BASNet
 
 def save_output(save_dir, save_name, mask):
+	pdb.set_trace()
 	os.makedirs(save_dir, exist_ok=True)
 
 	im = Image.fromarray(mask*255).convert('RGB')
