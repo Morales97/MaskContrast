@@ -71,8 +71,8 @@ def postprocess(model_output: np.array) -> np.array:
 
 if __name__ == '__main__':
 
-	_gta = True
-	_cityscapes = False
+	_gta = False
+	_cityscapes = True
 
 	# --------- 1. get image path and name ---------
 	
