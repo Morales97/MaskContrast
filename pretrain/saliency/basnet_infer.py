@@ -122,6 +122,7 @@ if __name__ == '__main__':
 
 		# save
 		name = dataset.get_img_save_path(data['index'])
+		pdb.set_trace()
 		save_output(save_dir, name, mask)
 		if _gta:
 			save_img(img_save_dir, name, image)
