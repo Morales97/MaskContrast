@@ -4,6 +4,7 @@
 
 # Dataset
 train_db_name: cityscapes
+use_gt_masks: False
 train_db_kwargs:
    saliency: saliency_basnet_tiny
 train_db2_name: gta5
