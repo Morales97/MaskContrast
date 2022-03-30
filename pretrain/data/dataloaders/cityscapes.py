@@ -157,14 +157,16 @@ class Cityscapes_Mix(data.Dataset):
         self.files_gt = self.files[:self.n_samples]
         self.files_est = self.files[self.n_samples:]
 
+        i = 0
         for img_path in self.files_gt:
             city = img_path.split(os.sep)[-2]
             sal_name = img_path.split(os.sep)[-1].rstrip('.jpg')
             masks = sorted(recursive_find_masks(os.path.join(self.masks_sup_dir, city), sal_name))
             if len(masks) > 0:
-                self.images.append(img_path)
+                i += 1
+                self.images.append(img_path * len(masks)) # add the images once for each mask
                 self.sal = self.sal + masks
-        print("Step 1. Found %d images with %d ground-truch object masks" % (len(self.images), len(self.sal)))
+        print("Step 1. Found %d images with %d ground-truth object masks" % (i, len(self.sal)))
 
         i = 0
         for img_path in self.files_est:
@@ -177,6 +179,7 @@ class Cityscapes_Mix(data.Dataset):
                 self.sal.append(sal_path)
         print("Step 2. Found %d images with an estiamted object mask, out of %d total images" % (i, len(self.files_est)))
 
+        assert len(self.images) == len(self.sal)
 
         if overfit:
             n_of = 32
