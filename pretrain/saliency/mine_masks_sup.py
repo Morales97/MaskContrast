@@ -70,7 +70,7 @@ if __name__ == '__main__':
 	_gta = False
 	_cityscapes = True
 	ignore_index = 250
-	top_k = 5
+	top_k = -1 # 5
 
 	# --------- 1. get image path and name ---------
 	
