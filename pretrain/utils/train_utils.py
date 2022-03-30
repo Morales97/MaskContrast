@@ -105,8 +105,13 @@ def train_two_datasets(p, train_loader, train_loader_2, model, optimizer, epoch,
             # TODO check that this condition does not leave last batch unused
             break
 
+        print(i)
         batch_1 = next(data_iter_1)
         batch_2 = next(data_iter_2)
+        pdb.set_trace()
+        continue
+
+
 
         optimizer.zero_grad()
         loss = 0
