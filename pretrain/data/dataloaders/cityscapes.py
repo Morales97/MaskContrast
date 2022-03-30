@@ -164,7 +164,6 @@ class Cityscapes_Mix(data.Dataset):
             if len(masks) > 0:
                 self.images.append(img_path)
                 self.sal = self.sal + masks
-        pdb.set_trace()
         print("Step 1. Found %d images with %d ground-truch object masks" % (len(self.images), len(self.sal)))
 
         i = 0
