@@ -28,4 +28,4 @@
 
 # ---- with supervised object masks -----
 #cityscapes lraspp
-python main_single_thread.py --expt_name=CS_100sup_mn_lraspp_top5 --config_env configs/env.yml --config_exp configs/cityscapes_lraspp.yml
+python main_single_thread.py --expt_name=CS_100sup_mn_lraspp_all_classes --config_env configs/env.yml --config_exp configs/cityscapes_lraspp.yml
