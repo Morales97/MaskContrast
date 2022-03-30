@@ -69,6 +69,7 @@ if __name__ == '__main__':
 
 	_gta = False
 	_cityscapes = True
+	ignore_index = 250
 
 	# --------- 1. get image path and name ---------
 	
@@ -107,7 +108,7 @@ if __name__ == '__main__':
 
 		masks = []
 		for top_class in top_classes:
-			if top_class != 0 and top_class != self.ignore_index:
+			if top_class != 0 and top_class != ignore_index:
 				#mask = (lbl == top_class) * top_class   # generates mask with index of the class
 				mask = (lbl == top_class) * 1            # generates mask with 0 and 1
 				masks.append(mask)
