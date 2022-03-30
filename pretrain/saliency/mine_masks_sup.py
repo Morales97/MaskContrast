@@ -128,6 +128,6 @@ if __name__ == '__main__':
 			save_path = save_dir
 		
 		for i, mask in enumerate(masks):
-			#save_output(save_path, name + '_' + str(i), mask)
+			pass#save_output(save_path, name + '_' + str(i), mask)
 
 	
