@@ -121,12 +121,13 @@ if __name__ == '__main__':
 		name = dataset.get_img_save_path(data['index'])
 		if _cityscapes:
 			city, name = name.split(os.sep)
-			save_dir = os.path.join(save_dir, city)
+			save_path = os.path.join(save_dir, city)
 		if _gta:
 			save_img(img_save_dir, name, image)
+			save_path = save_dir
 		
 		pdb.set_trace()
 		for i, mask in enumerate(masks):
-			save_output(save_dir, name + '_i', mask)
+			save_output(save_path, name + '_' + str(i), mask)
 
 	
