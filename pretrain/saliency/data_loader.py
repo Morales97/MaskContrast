@@ -103,7 +103,7 @@ class cityscapesDataset(Dataset):
                 img_path.split(os.sep)[-2],
                 os.path.basename(img_path)[:-15] + "gtFine_labelIds.png")
             lbl = pil_loader(lbl_path, self.img_size[0], self.img_size[1], is_segmentation=True)
-
+        pdb.set_trace()
         sample = {'image': img, 'label': lbl, 'index': index}
         return sample
 
