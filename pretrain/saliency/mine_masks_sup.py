@@ -103,7 +103,7 @@ if __name__ == '__main__':
 		lbl = data['label']
 
 		lbl_class, lbl_count = lbl.unique(return_counts=True)   
-		if top_k = -1:
+		if top_k == -1:
 			top_count, top_idxs = lbl_count.topk(len(lbl_class))   # get top k class counts and idx
 		else:
 			top_count, top_idxs = lbl_count.topk(top_k)   # get top k class counts and idx
