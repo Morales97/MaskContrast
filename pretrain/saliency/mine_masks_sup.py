@@ -74,7 +74,7 @@ if __name__ == '__main__':
 	
 	if _cityscapes:
 		image_dir = '../data/cityscapes/leftImg8bit_tiny/'
-		label_dir = '../data/cityscapes/'
+		label_dir = '../data/cityscapes/gtFine'
 		save_dir = '../data/cityscapes/saliency_mined_masks/'
 	elif _gta:
 		image_dir = '../data/gta5/images_tiny/'
@@ -90,7 +90,7 @@ if __name__ == '__main__':
 	#1. dataload
 	transform = transforms.Compose([transforms.ToTensor()])
 	if _cityscapes:
-		dataset = cityscapesDataset(image_path=image_dir, transform=transform, n_samples=100)
+		dataset = cityscapesDataset(image_path=image_dir, label_path=label_dir, transform=transform, n_samples=100)
 	elif _gta:
 		dataset = gtaDataset(image_path=image_dir, transform=transform)
 	dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
