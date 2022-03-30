@@ -101,15 +101,15 @@ if __name__ == '__main__':
 		pdb.set_trace()
 
 		lbl_class, lbl_count = lbl.unique(return_counts=True)   
-        top_count, top_idxs = lbl_count.topk(3)    # get top 3 class counts and idx
-        top_classes = lbl_class[top_idxs]            # get class from idx
+		top_count, top_idxs = lbl_count.topk(3)    # get top 3 class counts and idx
+		top_classes = lbl_class[top_idxs]            # get class from idx
 
-        masks = []
-        for top_class in top_classes:
-            if top_class != 0 and top_class != self.ignore_index:
-                #mask = (lbl == top_class) * top_class   # generates mask with index of the class
-                mask = (lbl == top_class) * 1            # generates mask with 0 and 1
-                masks.append(mask)
+		masks = []
+		for top_class in top_classes:
+			if top_class != 0 and top_class != self.ignore_index:
+				#mask = (lbl == top_class) * top_class   # generates mask with index of the class
+				mask = (lbl == top_class) * 1            # generates mask with 0 and 1
+				masks.append(mask)
 
 		mask = postprocess(out)
 		if mask is None:
