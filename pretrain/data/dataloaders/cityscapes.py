@@ -133,7 +133,7 @@ class Cityscapes_Mix(data.Dataset):
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/cityscapes',     #TODO change to use data.util.mypath as in VOCSegmentation
                  saliency='saliency_basnet_tiny', split='leftImg8bit_tiny/train', n_samples_lbld=-1,
                  transform=None, overfit=False):
-        super(Cityscapes, self).__init__()
+        super(Cityscapes_Mix, self).__init__()
 
         self.root = root
         self.transform = transform
@@ -163,7 +163,7 @@ class Cityscapes_Mix(data.Dataset):
             sal_name = img_path.split(os.sep)[-1].rstrip('.jpg')
             masks = sorted(recursive_find_masks(os.path.join(self.masks_sup_dir, city), sal_name))
             pdb.set_trace()
-            
+
         for img_path in self.files_est:
             city = img_path.split(os.sep)[-2]
             sal_name = img_path.split(os.sep)[-1].rstrip('.jpg') + '.png'
