@@ -9,7 +9,7 @@
 #SBATCH --qos=gpu_free
 #SBATCH --gres=gpu:1
 #SBATCH --mem=30000
-#SBATCH --time=16:00:00
+#SBATCH --time=06:00:00
 
 #python main.py --expt_name=test --config_env configs/env.yml --config_exp configs/VOCSegmentation_supervised_saliency_model.yml
 #python main_single_thread.py --expt_name=test_no_acc --config_env configs/env.yml --config_exp configs/VOCSegmentation_supervised_saliency_model.yml
