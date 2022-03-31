@@ -95,7 +95,7 @@ if __name__ == '__main__':
 	if _cityscapes:
 		dataset = cityscapesDataset(image_path=image_dir, label_path=label_dir, transform=transform, n_samples=100)
 	elif _gta:
-		dataset = gtaDataset(image_path=image_dir, label_path=label_dir, transform=transform, n_samples=100)
+		dataset = gtaDataset(image_path=image_dir, label_path=label_dir, transform=transform, n_samples=-1)
 	dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
 	
 	# --------- 3. mine object masks from segmentation labels ---------

@@ -11,4 +11,5 @@
 #SBATCH --mem=30000
 #SBATCH --time=01:00:00
 
-python basnet_infer.py
+python mine_masks_sup.py
+#python basnet_infer.py
