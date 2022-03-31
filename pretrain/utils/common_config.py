@@ -112,7 +112,9 @@ def get_train_dataset(p, transform=None, dataset=None, use_gt_masks=False):
     if dataset == 'cityscapes':
         from data.dataloaders.cityscapes import Cityscapes, Cityscapes_Mix
         if use_gt_masks:
-            return Cityscapes_Mix(transform=transform, n_samples_lbld=p['train_db_kwargs']['n_gt_images'])
+            return Cityscapes_Mix(transform=transform, 
+                                  saliency_gt=p['train_db_kwargs']['saliency_gt']
+                                  n_samples_lbld=p['train_db_kwargs']['n_gt_images'])
         else:
             return Cityscapes(transform=transform, n_samples=100)
 

@@ -73,7 +73,7 @@ def main():
     os.makedirs(args.save_dir, exist_ok=True)
 
     main_worker(0, ngpus_per_node, wandb, args=args)
-    wandb.join()
+    wandb.finish()
 
 def main_worker(gpu, ngpus_per_node, wandb, args):
     # Retrieve config file

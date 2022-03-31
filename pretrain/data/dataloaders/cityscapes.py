@@ -127,7 +127,7 @@ class Cityscapes_Mix(data.Dataset):
     '''
 
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/cityscapes',     #TODO change to use data.util.mypath as in VOCSegmentation
-                 saliency='saliency_basnet_tiny', saliency_gt='saliency_mined_masks_all_classes', split='leftImg8bit_tiny/train', n_samples_lbld=-1,
+                 saliency='saliency_basnet_tiny', saliency_gt='saliency_mined_masks', split='leftImg8bit_tiny/train', n_samples_lbld=-1,
                  transform=None, overfit=False):
         super(Cityscapes_Mix, self).__init__()
 
