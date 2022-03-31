@@ -118,7 +118,13 @@ def get_train_dataset(p, transform=None, dataset=None, use_gt_masks=False):
 
     if dataset == 'gta5':
         from data.dataloaders.gta import Gta
-        return Gta(transform=transform)
+        if use_gt_masks:
+            return Gta(transform=transform, 
+                       use_gt_masks=use_gt_masks,
+                       saliency=p['train_db_kwargs']['saliency_gt'],
+                       split='images_tiny_cropped_sup')   
+        else:
+            return Gta(transform=transform)
 
     else:    
         raise ValueError('Invalid train db name {}'.format(dataset))   

@@ -121,7 +121,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
     print(colored(train_dataset, 'yellow'))
 
     if p['train_db2_name'] is not None:
-        train_dataset_2 = DatasetKeyQuery(get_train_dataset(p, transform=None, dataset=p['train_db2_name']), 
+        train_dataset_2 = DatasetKeyQuery(get_train_dataset(p, transform=None, dataset=p['train_db2_name'], use_gt_masks=p['use_gt_masks']), 
                                         train_transform, 
                                         downsample_sal=not p['model_kwargs']['upsample'])
         train_dataloader_2 = torch.utils.data.DataLoader(train_dataset_2, batch_size=p['train_batch_size'], shuffle=True, num_workers=p['num_workers'])

@@ -25,19 +25,28 @@ def recursive_glob(rootdir=".", suffix=""):
         if filename.endswith(suffix)
     ]
 
+def recursive_find_masks(rootdir=".", rootname=""):
+    return [
+        os.path.join(looproot, filename)
+        for looproot, _, filenames in os.walk(rootdir)
+        for filename in filenames
+        if filename.startswith(rootname)
+    ]
+
 class Gta(data.Dataset):
 
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/gta5',     #TODO change to use data.util.mypath as in VOCSegmentation
                  saliency='saliency_basnet_cropped', split='images_tiny_cropped', n_samples=-1,
-                 transform=None, overfit=False):
+                 transform=None, overfit=False, use_gt_masks=False):
         super(Gta, self).__init__()
 
         self.root = root
         self.transform = transform
         self.split = split
+        self.use_gt_masks = use_gt_masks
 
         self.images_dir = os.path.join(self.root, self.split)
-        valid_saliency = ['saliency_basnet_cropped']
+        valid_saliency = ['saliency_basnet_cropped', 'saliency_mined_masks_cropped']
         assert(saliency in valid_saliency)
         self.saliency = saliency
         self.sal_dir = os.path.join(self.root, self.saliency)
@@ -53,13 +62,26 @@ class Gta(data.Dataset):
         if not self.files:
             raise Exception("No files found in %s" % self.images_dir)
 
-        for img_path in self.files:
-            sal_name = img_path.split(os.sep)[-1].rstrip('.jpg') + '.png'
-            sal_path = os.path.join(self.sal_dir, sal_name)
-            if os.path.isfile(sal_path):
-                self.images.append(img_path)
-                self.sal.append(sal_path)
-        print("Found %d images with saliency map, out of %d total images" % (len(self.images), len(self.files)))
+        if not self.use_gt_masks:
+            # Load image and corresponding estimated saliency mask
+            for img_path in self.files:
+                sal_name = img_path.split(os.sep)[-1].rstrip('.jpg') + '.png'
+                sal_path = os.path.join(self.sal_dir, sal_name)
+                if os.path.isfile(sal_path):
+                    self.images.append(img_path)
+                    self.sal.append(sal_path)
+            print("Found %d images with saliency map, out of %d total images" % (len(self.images), len(self.files)))
+        else:
+            # Load image and all corresponding masks from the ground truth
+            i = 0
+            for img_path in self.files:
+                sal_name = img_path.split(os.sep)[-1].rstrip('.jpg')
+                masks = sorted(recursive_find_masks(self.sal_dir, sal_name))
+                if len(masks) > 0:
+                    i += 1
+                    self.images = self.images + ([img_path] * len(masks)) # add the images once for each mask
+                    self.sal = self.sal + masks
+            print("Found %d images with %d ground-truth object masks" % (i, len(self.sal)))
 
         assert (len(self.images) == len(self.sal))
 

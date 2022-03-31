@@ -26,10 +26,6 @@ def recursive_glob(rootdir=".", suffix=""):
     ]
 
 def recursive_find_masks(rootdir=".", rootname=""):
-    """Performs recursive glob with given suffix and rootdir
-        :param rootdir is the root directory
-        :param suffix is the suffix to be searched
-    """
     return [
         os.path.join(looproot, filename)
         for looproot, _, filenames in os.walk(rootdir)

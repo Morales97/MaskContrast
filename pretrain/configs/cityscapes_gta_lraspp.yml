@@ -7,9 +7,12 @@ train_db_name: cityscapes
 use_gt_masks: False
 train_db_kwargs:
    saliency: saliency_basnet_tiny
+   saliency_gt: saliency_mined_masks
+   n_gt_images: 100
 train_db2_name: gta5
 train_db2_kwargs:
    saliency: saliency_basnet_cropped
+   saliency_gt: saliency_mined_masks_cropped
 num_workers: 8
 train_batch_size: 32
 
