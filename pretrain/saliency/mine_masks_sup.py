@@ -107,7 +107,7 @@ if __name__ == '__main__':
 		if top_k == -1:
 			top_count, top_idxs = lbl_count.topk(len(lbl_class))   # get top k class counts and idx
 		else:
-			top_count, top_idxs = lbl_count.topk(min(top_k, len(lbl_class))   # get top k class counts and idx
+			top_count, top_idxs = lbl_count.topk(min(top_k, len(lbl_class)))   # get top k class counts and idx
 		top_classes = lbl_class[top_idxs]            # get class from idx
 
 		masks = []
