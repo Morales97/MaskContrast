@@ -4,7 +4,7 @@
 
 # Dataset
 train_db_name: cityscapes
-use_gt_masks: False
+use_gt_masks: True # !! dont forget to check this
 train_db_kwargs:
    saliency: saliency_basnet_tiny
    saliency_gt: saliency_mined_masks
