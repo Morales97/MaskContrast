@@ -9,6 +9,7 @@ train_db_kwargs:
    saliency: saliency_basnet_tiny
    saliency_gt: saliency_mined_masks
    n_gt_images: 100
+   load_unsup: False # use only supervised masks or supervised + unsupervised
 train_db2_name: null
 train_db2_kwargs:
    saliency: null

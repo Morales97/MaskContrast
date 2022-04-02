@@ -128,7 +128,7 @@ class Cityscapes_Mix(data.Dataset):
 
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/cityscapes',     #TODO change to use data.util.mypath as in VOCSegmentation
                  saliency='saliency_basnet_tiny', saliency_gt='saliency_mined_masks', split='leftImg8bit_tiny/train', n_samples_lbld=-1,
-                 transform=None, overfit=False):
+                 transform=None, overfit=False, load_unsup=True):
         super(Cityscapes_Mix, self).__init__()
 
         self.root = root
@@ -165,15 +165,16 @@ class Cityscapes_Mix(data.Dataset):
         print("Step 1. Found %d images with %d ground-truth object masks" % (i, len(self.sal)))
 
         i = 0
-        for img_path in self.files_est:
-            city = img_path.split(os.sep)[-2]
-            sal_name = img_path.split(os.sep)[-1].rstrip('.jpg') + '.png'
-            sal_path = os.path.join(self.sal_dir, city, sal_name)
-            if os.path.isfile(sal_path):
-                i += 1
-                self.images.append(img_path)
-                self.sal.append(sal_path)
-        print("Step 2. Found %d images with an estiamted object mask, out of %d total images" % (i, len(self.files_est)))
+        if load_unsup:
+            for img_path in self.files_est:
+                city = img_path.split(os.sep)[-2]
+                sal_name = img_path.split(os.sep)[-1].rstrip('.jpg') + '.png'
+                sal_path = os.path.join(self.sal_dir, city, sal_name)
+                if os.path.isfile(sal_path):
+                    i += 1
+                    self.images.append(img_path)
+                    self.sal.append(sal_path)
+            print("Step 2. Found %d images with an estiamted object mask, out of %d total images" % (i, len(self.files_est)))
 
         assert len(self.images) == len(self.sal)
 
