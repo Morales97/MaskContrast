@@ -28,7 +28,7 @@
 
 # ---- with supervised object masks -----
 #cityscapes lraspp
-python main_single_thread.py --expt_name=CS_100sup_no_unsup --config_env configs/env.yml --config_exp configs/cityscapes_lraspp.yml
+python main_single_thread.py --expt_name=CS_100sup_no_unsup_no_sal_loss --config_env configs/env.yml --config_exp configs/cityscapes_lraspp.yml
 
 # CS + GTA lraspp
 #python main_single_thread.py --expt_name=CS_GTA_sup_masks --config_env configs/env.yml --config_exp configs/cityscapes_gta_lraspp.yml
