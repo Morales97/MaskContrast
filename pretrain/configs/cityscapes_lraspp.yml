@@ -4,7 +4,7 @@
 
 # Dataset
 train_db_name: cityscapes
-use_gt_masks: True      # masks mined from ground-truth labels
+use_gt_masks: False      # masks mined from ground-truth labels
 train_db_kwargs:
    saliency: saliency_basnet_tiny
    saliency_gt: saliency_mined_masks

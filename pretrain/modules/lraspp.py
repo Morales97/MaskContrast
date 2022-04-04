@@ -51,7 +51,7 @@ class LRASPPHead_with_saliency(nn.Module):
         return x
 
 
-def get_backbone_lraspp_mobilenetv3(pretrained=True):
+def get_backbone_lraspp_mobilenetv3(pretrained=False):
     '''
     modify MobileNetV3 backbone so it can be attached to LR-ASPP head
     based on torch's implementation

@@ -127,7 +127,7 @@ def train_two_datasets(p, train_loader, train_loader_2, model, optimizer, epoch,
             contrastive_loss = cross_entropy(logits, labels, weight=w_class, reduction='mean')
 
             # Calculate total loss and update meters
-            loss += contrastive_loss #+ saliency_loss
+            loss += contrastive_loss + saliency_loss
             contrastive_losses.update(contrastive_loss.item())
             saliency_losses.update(saliency_loss.item())
             losses.update(loss.item())
