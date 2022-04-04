@@ -129,10 +129,10 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
         print(colored(train_dataset_2, 'yellow'))
     
     # Resume from checkpoint
-    if p['load_checkpoint'] and os.path.exists(p['checkpoint']):
-        print(colored('Restart from checkpoint {}'.format(p['checkpoint']), 'blue'))
+    if p['load_checkpoint'] and os.path.exists(p['my_checkpoint']):
+        print(colored('Restart from checkpoint {}'.format(p['my_checkpoint']), 'blue'))
         loc = 'cuda:{}'.format(args.gpu)
-        checkpoint = torch.load(p['checkpoint'], map_location=loc)
+        checkpoint = torch.load(p['my_checkpoint'], map_location=loc)
         optimizer.load_state_dict(checkpoint['optimizer'])
         model.load_state_dict(checkpoint['model'])
         if args.nvidia_apex:
