@@ -30,7 +30,9 @@ head: lraspp
 # Freeze block 1 and 2 in backbone (~1% miou improvement)
 # NOTE cannot freeze layers with the current function (utils.utils.py) when single_thread
 freeze_layers: False 
-load_checkpoint: False
+load_checkpoint: True
+checkpoint: /home/danmoral/MaskContrast/pretrain/outputs/ckpt_mask_pt_CS_no_IN_99.tar
+
 
 # Optimizer
 epochs: 600 #40   -- set to 600 so that the poy scheduler does not impact that much
