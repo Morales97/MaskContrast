@@ -31,7 +31,7 @@ head: lraspp
 # NOTE cannot freeze layers with the current function (utils.utils.py) when single_thread
 freeze_layers: False 
 load_checkpoint: True
-my_checkpoint: /home/danmoral/MaskContrast/pretrain/outputs/ckpt_mask_pt_CS_no_IN_99.tar
+my_checkpoint: /home/danmoral/MaskContrast/pretrain/outputs/ckpt_mask_pt_CS_no_IN_199.tar
 
 
 # Optimizer
