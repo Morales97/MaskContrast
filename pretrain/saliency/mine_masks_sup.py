@@ -95,6 +95,8 @@ if __name__ == '__main__':
 	#1. dataload
 
 	cs_samples = 2975
+	np.random.seed(seed)
+
 	idxs = np.arange(cs_samples)
 	idxs = np.random.permutation(idxs)
 	idxs_lbl = idxs[:n_samples]
