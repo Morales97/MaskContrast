@@ -184,3 +184,6 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
 
 if __name__ == "__main__":
     main()
+
+# python main_single_thread.py --expt_name=test --config_env configs/env.yml --config_exp configs/cityscapes_gta_lraspp.yml
+
