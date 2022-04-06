@@ -95,8 +95,8 @@ if __name__ == '__main__':
 	#1. dataload
 
 	idxs = np.arange(n_samples)
-    idxs = np.random.permutation(idxs)
-    idxs_lbl = idxs[:n_lbl_samples]
+	idxs = np.random.permutation(idxs)
+	idxs_lbl = idxs[:n_lbl_samples]
 	pdb.set_trace()
 
 	transform = transforms.Compose([transforms.ToTensor()])
