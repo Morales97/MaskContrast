@@ -67,17 +67,19 @@ def postprocess(model_output: np.array, area_th=0.01) -> np.array:
 
 if __name__ == '__main__':
 
-	_gta = True
-	_cityscapes = False
+	_gta = False
+	_cityscapes = True
 	ignore_index = 250
 	top_k = 5 # -1
+	seed = 1
+	n_samples = 100
 
 	# --------- 1. get image path and name ---------
 	
 	if _cityscapes:
 		image_dir = '../data/cityscapes/leftImg8bit_tiny/'
 		label_dir = '../data/cityscapes/gtFine'
-		save_dir = '../data/cityscapes/saliency_mined_masks/'
+		save_dir = '../data/cityscapes/saliency_mined_masks_100_seed1/'
 	elif _gta:
 		image_dir = '../data/gta5/images_tiny/'
 		label_dir = '../data/gta5/labels/'
@@ -91,9 +93,15 @@ if __name__ == '__main__':
 
 	# --------- 2. dataloader ---------
 	#1. dataload
+
+	idxs = np.arange(n_samples)
+    idxs = np.random.permutation(idxs)
+    idxs_lbl = idxs[:n_lbl_samples]
+	pdb.set_trace()
+
 	transform = transforms.Compose([transforms.ToTensor()])
 	if _cityscapes:
-		dataset = cityscapesDataset(image_path=image_dir, label_path=label_dir, transform=transform, n_samples=100)
+		dataset = cityscapesDataset(image_path=image_dir, label_path=label_dir, transform=transform, sample_idxs=idxs_lbl)
 	elif _gta:
 		dataset = gtaDataset(image_path=image_dir, label_path=label_dir, transform=transform, n_samples=-1)
 	dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)

@@ -54,6 +54,7 @@ class cityscapesDataset(Dataset):
         label_path=None,
         split="train",
         n_samples= -1,        # Select only few samples for training
+        sample_idxs=None,
         size="tiny",
 		transform=None
     ):
@@ -68,6 +69,8 @@ class cityscapesDataset(Dataset):
             raise Exception('size not valid')
 
         self.n_samples = n_samples
+        self.sample_idxs = sample_idxs
+
         self.n_classes = 19
         self.files = {}
         self.transforms = transform
@@ -104,7 +107,10 @@ class cityscapesDataset(Dataset):
         self.class_map = dict(zip(self.valid_classes, range(19)))
 
         self.files[split] = sorted(recursive_glob(rootdir=self.images_base, suffix=".jpg"))
-        if self.n_samples >= 0:
+        if self.sample_idxs is not None:
+            files = np.array(self.files[split])
+            self.files[split] = files[sample_idxs].tolist()  
+        elif self.n_samples >= 0:
             self.files[split] = self.files[split][:self.n_samples]
     
         if not self.files[split]:
