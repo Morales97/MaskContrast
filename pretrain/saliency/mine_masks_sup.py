@@ -99,8 +99,7 @@ if __name__ == '__main__':
 
 	idxs = np.arange(cs_samples)
 	idxs = np.random.permutation(idxs)
-	idxs_lbl = idxs[:n_samples]
-	pdb.set_trace()
+	idxs_lbl = idxs[:n_samples]	# checked, this selects the same samples as in 'ssda' project train
 
 	transform = transforms.Compose([transforms.ToTensor()])
 	if _cityscapes:
