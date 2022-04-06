@@ -180,7 +180,7 @@ class Cityscapes_Mix(data.Dataset):
                     i += 1
                     self.images.append(img_path)
                     self.sal.append(sal_path)
-            print("Step 2. Found %d images with an estiamted object mask, out of %d total images" % (i, len(self.files_est)))
+            print("Step 2. Found %d images with an estimated object mask, out of %d total images" % (i, len(self.files_est)))
 
         assert len(self.images) == len(self.sal)
 

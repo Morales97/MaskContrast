@@ -119,7 +119,7 @@ def get_train_dataset(p, transform=None, dataset=None, use_gt_masks=False):
 			idxs = np.random.permutation(idxs)
 			idxs_lbl = idxs[:n_samples]	# checked, this selects the same samples as in 'ssda' project train
 			idxs_unlbl = idxs[n_samples:]
-			pdb.set_trace()
+
 			return Cityscapes_Mix(transform = transform, 
 								  saliency_gt = p['train_db_kwargs']['saliency_gt'],
 								  sample_idxs_lbl = idxs_lbl, 
