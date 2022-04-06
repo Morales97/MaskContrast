@@ -9,7 +9,7 @@ import torchvision
 import data.dataloaders.transforms as transforms
 from data.util.mypath import Path
 from utils.collate import collate_custom
-
+import pdb
 
 def load_pretrained_weights(p, model):
     if p['backbone_kwargs']['pretraining'] == 'imagenet_classification':
@@ -112,10 +112,19 @@ def get_train_dataset(p, transform=None, dataset=None, use_gt_masks=False):
     if dataset == 'cityscapes':
         from data.dataloaders.cityscapes import Cityscapes, Cityscapes_Mix
         if use_gt_masks:
-            return Cityscapes_Mix(transform=transform, 
-                                  saliency_gt=p['train_db_kwargs']['saliency_gt'],
-                                  n_samples_lbld=p['train_db_kwargs']['n_gt_images'], 
-                                  load_unsup=p['train_db_kwargs']['load_unsup'])
+            np.random.seed(p['seed'])
+            cs_samples = 2975
+            n_samples = p['train_db_kwargs']['n_gt_images']
+            idxs = np.arange(cs_samples)
+	        idxs = np.random.permutation(idxs)
+	        idxs_lbl = idxs[:n_samples]	# checked, this selects the same samples as in 'ssda' project train
+            idxs_unlbl = idxs[n_samples:]
+            pdb.set_trace()
+            return Cityscapes_Mix(transform = transform, 
+                                  saliency_gt = p['train_db_kwargs']['saliency_gt'],
+                                  sample_idxs_lbl = idxs_lbl, 
+                                  sample_idxs_unlbl = idxs_unlbl,
+                                  load_unsup = p['train_db_kwargs']['load_unsup'])
         else:
             return Cityscapes(transform=transform, n_samples=-1)
 

@@ -127,7 +127,7 @@ class Cityscapes_Mix(data.Dataset):
     '''
 
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/cityscapes',     #TODO change to use data.util.mypath as in VOCSegmentation
-                 saliency='saliency_basnet_tiny', saliency_gt='saliency_mined_masks', split='leftImg8bit_tiny/train', n_samples_lbld=-1,
+                 saliency='saliency_basnet_tiny', saliency_gt='saliency_mined_masks', split='leftImg8bit_tiny/train', n_samples_lbld=-1, sample_idxs_lbl=None, sample_idxs_unlbl=None,
                  transform=None, overfit=False, load_unsup=True):
         super(Cityscapes_Mix, self).__init__()
 
@@ -136,7 +136,7 @@ class Cityscapes_Mix(data.Dataset):
         self.split = split
 
         self.images_dir = os.path.join(self.root, self.split)
-        valid_saliency = ['saliency_basnet_tiny', 'saliency_mined_masks', 'saliency_mined_masks_all_classes']
+        valid_saliency = ['saliency_basnet_tiny', 'saliency_mined_masks', 'saliency_mined_masks_all_classes', 'saliency_mined_masks_100_seed1']
         assert(saliency in valid_saliency) and (saliency_gt in valid_saliency)
         self.saliency = saliency
         self.sal_dir = os.path.join(self.root, self.saliency)
@@ -149,9 +149,15 @@ class Cityscapes_Mix(data.Dataset):
         self.files = sorted(recursive_glob(rootdir=self.images_dir, suffix=".jpg"))
         if not self.files:
             raise Exception("No files found in %s" % self.images_dir)
-
-        self.files_gt = self.files[:self.n_samples]
-        self.files_est = self.files[self.n_samples:]
+        
+        if sample_idxs_lbl is not None:
+            assert sample_idxs_unlbl is not None
+            files = np.array(self.files)
+            self.files_gt = files[sample_idxs_lbl].tolist() 
+            self.files_est = files[sample_idxs_unlbl].tolist() 
+        else:
+            self.files_gt = self.files[:self.n_samples]
+            self.files_est = self.files[self.n_samples:]
 
         i = 0
         for img_path in self.files_gt:

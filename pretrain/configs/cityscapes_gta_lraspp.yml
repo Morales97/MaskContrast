@@ -2,12 +2,15 @@
 # Authors: Wouter Van Gansbeke & Simon Vandenhende
 # Licensed under the CC BY-NC 4.0 license (https://creativecommons.org/licenses/by-nc/4.0/)
 
+# Seed
+seed: 1
+
 # Dataset
 train_db_name: cityscapes
 use_gt_masks: True # !! dont forget to check this
 train_db_kwargs:
    saliency: saliency_basnet_tiny
-   saliency_gt: saliency_mined_masks
+   saliency_gt: saliency_mined_masks_100_seed1
    n_gt_images: 100
 train_db2_name: gta5
 train_db2_kwargs:
