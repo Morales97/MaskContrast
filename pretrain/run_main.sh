@@ -32,4 +32,4 @@
 #python main_single_thread.py --expt_name=CS_100sup_no_unsup_no_sal_loss --config_env configs/env.yml --config_exp configs/cityscapes_lraspp.yml
 
 #
-python main_single_thread.py --expt_name=CS_sup_masks_s1 --config_env configs/env.yml --config_exp configs/cityscapes_lraspp.yml
+python main_single_thread.py --expt_name=CS_sup_masks_s2 --config_env configs/env.yml --config_exp configs/cityscapes_lraspp.yml
