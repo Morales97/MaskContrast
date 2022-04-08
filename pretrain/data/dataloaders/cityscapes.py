@@ -136,7 +136,7 @@ class Cityscapes_Mix(data.Dataset):
         self.split = split
 
         self.images_dir = os.path.join(self.root, self.split)
-        valid_saliency = ['saliency_basnet_tiny', 'saliency_mined_masks', 'saliency_mined_masks_all_classes', 'saliency_mined_masks_100_seed1']
+        valid_saliency = ['saliency_basnet_tiny', 'saliency_mined_masks', 'saliency_mined_masks_all_classes', 'saliency_mined_masks_100_seed1', 'saliency_mined_masks_100_seed2', 'saliency_mined_masks_100_seed3']
         assert(saliency in valid_saliency) and (saliency_gt in valid_saliency)
         self.saliency = saliency
         self.sal_dir = os.path.join(self.root, self.saliency)
