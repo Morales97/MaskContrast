@@ -33,7 +33,7 @@ freeze_layers: False
 load_checkpoint: False
 
 # Optimizer
-epochs: 100
+epochs: 400
 optimizer: sgd
 optimizer_kwargs:
    lr: 0.004
