@@ -2,8 +2,12 @@
 # Authors: Wouter Van Gansbeke & Simon Vandenhende
 # Licensed under the CC BY-NC 4.0 license (https://creativecommons.org/licenses/by-nc/4.0/)
 
+# Seed
+seed: 1
+
 # Dataset
 train_db_name: cityscapes
+use_gt_masks: False
 train_db_kwargs:
    saliency: saliency_basnet_tiny
 train_db2_name: null
@@ -29,7 +33,7 @@ freeze_layers: False
 load_checkpoint: False
 
 # Optimizer
-epochs: 40
+epochs: 100
 optimizer: sgd
 optimizer_kwargs:
    lr: 0.004

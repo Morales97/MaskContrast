@@ -61,7 +61,7 @@ parser.add_argument('--entity', type=str, default='morales97',
 parser.add_argument('--expt_name', type=str, default='',
                     help='Name of the experiment for wandb')
 
-parser.add_argument('--save_interval', default=20, type=int,
+parser.add_argument('--save_interval', default=50, type=int,
                     help='interval of epochs to save a checkpoint')
 
 def main():
@@ -178,7 +178,7 @@ def main_worker(gpu, ngpus_per_node, wandb, args):
                             'epoch': epoch + 1}, 
                             p['checkpoint'])
 
-            model_artifact = wandb.Artifact('checkpoint_{}'.format(epoch), type='model')
+            model_artifact = wandb.Artifact('checkpoint_{}'.format(epoch+1), type='model')
             model_artifact.add_file(p['checkpoint'])
             wandb.log_artifact(model_artifact)
 
