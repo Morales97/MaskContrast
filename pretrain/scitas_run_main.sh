@@ -22,7 +22,7 @@
 
 
 #cityscapes lraspp
-python main_single_thread.py --expt_name=CS_mn_lraspp_no_IN_bb --config_env configs/env.yml --config_exp configs/cityscapes_lraspp.yml
+python main_single_thread.py --expt_name=CS_deeplab --config_env configs/env.yml --config_exp configs/cityscapes_deeplab.yml
 
 #cityscapes+GTA lraspp
 #python main_single_thread.py --expt_name=CS_GTA_mn_lraspp_600_epochs --config_env configs/env.yml --config_exp configs/cityscapes_gta_lraspp.yml
