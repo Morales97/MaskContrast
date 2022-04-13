@@ -175,9 +175,13 @@ class ContrastiveModel(nn.Module):
         # prototypes_k: proto x dim
         q = torch.index_select(q, index=mask_indexes, dim=0)
         l_batch = torch.matmul(q, prototypes.t())   # shape: pixels x proto
+        
+        '''
         negatives = self.queue.clone().detach()     # shape: dim x negatives
         l_mem = torch.matmul(q, negatives)          # shape: pixels x negatives (Memory bank)
         logits = torch.cat([l_batch, l_mem], dim=1) # pixels x (proto + negatives)
+        '''
+        logists = l_batch # NOTE trying not to use negatives.
 
         # apply temperature
         logits /= self.T
