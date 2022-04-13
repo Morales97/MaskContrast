@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#SBATCH --job-name=seg_test
+#SBATCH --job-name=maskcontr
 #
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
