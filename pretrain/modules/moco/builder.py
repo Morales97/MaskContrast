@@ -181,7 +181,7 @@ class ContrastiveModel(nn.Module):
         l_mem = torch.matmul(q, negatives)          # shape: pixels x negatives (Memory bank)
         logits = torch.cat([l_batch, l_mem], dim=1) # pixels x (proto + negatives)
         '''
-        logists = l_batch # NOTE trying not to use negatives.
+        logits = l_batch # NOTE trying not to use negatives.
 
         # apply temperature
         logits /= self.T
