@@ -29,6 +29,7 @@ def train(p, train_loader, model, optimizer, epoch, amp, wandb=None):
         im_k = batch['key']['image'].cuda(p['gpu'], non_blocking=True)
         sal_q = batch['query']['sal'].cuda(p['gpu'], non_blocking=True)
         sal_k = batch['key']['sal'].cuda(p['gpu'], non_blocking=True)
+        pdb.set_trace()
 
         logits, labels, saliency_loss = model(im_q=im_q, im_k=im_k, sal_q=sal_q, sal_k=sal_k)
 
