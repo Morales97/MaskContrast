@@ -178,6 +178,7 @@ class ContrastiveModel(nn.Module):
             idx = torch.randperm(n_pixel)      
             random_pix_k = random_pix_k[idx].view(sal_k.size()) # shuffle and resize
             random_pix_k.to(sal_k.device)
+            pdb.set_trace()
             prototypes_random = torch.bmm(k, random_pix_k).squeeze() # B x dim
             prototypes_random = nn.functional.normalize(prototypes_random, dim=1)        
 
