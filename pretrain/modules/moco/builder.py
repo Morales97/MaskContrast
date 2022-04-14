@@ -170,24 +170,34 @@ class ContrastiveModel(nn.Module):
             prototypes_foreground = torch.bmm(k, sal_k).squeeze() # B x dim
             prototypes = nn.functional.normalize(prototypes_foreground, dim=1)        
 
+            # DM: create new prototypes with from random masks, to use as negatives
+            # Use a ~5% of pixels in a mask
+            n_pixel = sal_k.nelement()
+            random_pix_k = torch.zeros(n_pixel)     # init with 0s
+            random_pix_k[:n_pixel//20] = 1          # set first 5% to 1
+            idx = torch.randperm(n_pixel)      
+            random_pix_k = random_pix_k[idx].view(sal_k.size()) # shuffle and resize
+            prototypes_random = torch.bmm(k, random_pix_k).squeeze() # B x dim
+            prototypes_random = nn.functional.normalize(prototypes_random, dim=1)        
+
+
         # q: pixels x dim
         # k: pixels x dim
         # prototypes_k: proto x dim
         q = torch.index_select(q, index=mask_indexes, dim=0)
         l_batch = torch.matmul(q, prototypes.t())   # shape: pixels x proto
-        
-        '''
         negatives = self.queue.clone().detach()     # shape: dim x negatives
         l_mem = torch.matmul(q, negatives)          # shape: pixels x negatives (Memory bank)
         logits = torch.cat([l_batch, l_mem], dim=1) # pixels x (proto + negatives)
-        '''
+        
         logits = l_batch # NOTE trying not to use negatives.
 
         # apply temperature
         logits /= self.T
 
         # dequeue and enqueue
-        self._dequeue_and_enqueue(prototypes) 
+        #self._dequeue_and_enqueue(prototypes) 
+        self._dequeue_and_enqueue(prototypes_random) 
 
         return logits, sal_q, sal_loss
 
