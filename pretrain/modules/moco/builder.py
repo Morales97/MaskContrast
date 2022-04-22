@@ -172,6 +172,7 @@ class ContrastiveModel(nn.Module):
 
             # DM: create new prototypes with from random masks, to use as negatives
             # Use a ~5% of pixels in a mask
+            '''
             n_pixel = sal_k.nelement()
             random_pix_k = torch.zeros(n_pixel)     # init with 0s
             random_pix_k[:n_pixel//20] = 1          # set first 5% to 1
@@ -179,7 +180,8 @@ class ContrastiveModel(nn.Module):
             random_pix_k = random_pix_k[idx].view(sal_k.size()) # shuffle and resize
             random_pix_k = random_pix_k.to(sal_k.device)
             prototypes_random = torch.bmm(k, random_pix_k).squeeze() # B x dim
-            prototypes_random = nn.functional.normalize(prototypes_random, dim=1)        
+            prototypes_random = nn.functional.normalize(prototypes_random, dim=1)  
+            '''      
 
 
         # q: pixels x dim
@@ -191,14 +193,14 @@ class ContrastiveModel(nn.Module):
         l_mem = torch.matmul(q, negatives)          # shape: pixels x negatives (Memory bank)
         logits = torch.cat([l_batch, l_mem], dim=1) # pixels x (proto + negatives)
         
-        logits = l_batch # NOTE trying not to use negatives.
+        #logits = l_batch # NOTE uncomment to NOT USE NEGATIVES
 
         # apply temperature
         logits /= self.T
 
         # dequeue and enqueue
-        #self._dequeue_and_enqueue(prototypes) 
-        self._dequeue_and_enqueue(prototypes_random) 
+        self._dequeue_and_enqueue(prototypes) 
+        #self._dequeue_and_enqueue(prototypes_random) # NOTE uncomment THIS and 175-182 to use random negatives
 
         return logits, sal_q, sal_loss
 

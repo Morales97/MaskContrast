@@ -62,12 +62,10 @@ class Cityscapes(data.Dataset):
             raise Exception("No files found in %s" % self.images_dir)
 
         for img_path in self.files:
-            print(img_path)
             city = img_path.split(os.sep)[-2]
             sal_name = img_path.split(os.sep)[-1].rstrip('.jpg') + '.png'
             #sal_path = os.path.join(self.sal_dir, city, sal_name)
             sal_path = os.path.join(self.sal_dir, sal_name)
-            print(sal_path)
             if os.path.isfile(sal_path):
                 self.images.append(img_path)
                 self.sal.append(sal_path)
