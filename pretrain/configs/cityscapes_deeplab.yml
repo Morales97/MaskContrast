@@ -10,6 +10,7 @@ train_db_name: cityscapes
 use_gt_masks: False
 train_db_kwargs:
    saliency: saliency_basnet_tiny
+   split: leftImg8bit_tiny/train
 train_db2_name: null
 train_db2_kwargs:
    saliency: null
