@@ -71,14 +71,14 @@ def postprocess(model_output: np.array) -> np.array:
 
 if __name__ == '__main__':
 
-	_gta = True
-	_cityscapes = False
+	_gta = False
+	_cityscapes = True
 
 	# --------- 1. get image path and name ---------
 	
 	if _cityscapes:
-		image_dir = '../data/cityscapes/leftImg8bit_tiny/'
-		save_dir = '../data/cityscapes/saliency_basnet/'
+		image_dir = '../data/cityscapes/leftImg8bit_small/'
+		save_dir = '../data/cityscapes/saliency_basnet_small/'
 	elif _gta:
 		image_dir = '../data/gta5/images_tiny/'
 		img_save_dir = '../data/gta5/images_tiny_cropped/'
