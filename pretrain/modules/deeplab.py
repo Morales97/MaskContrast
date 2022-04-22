@@ -79,12 +79,12 @@ class _ASPP(nn.Module):
     Head for Deeplabv2
     """
 
-    def __init__(self, in_ch, out_ch, rates=[6,12,18,24]):
+    def __init__(self, in_channels, out_channels, rates=[6,12,18,24]):
         super(_ASPP, self).__init__()
         for i, rate in enumerate(rates):
             self.add_module(
                 "c{}".format(i),
-                nn.Conv2d(in_ch, out_ch, 3, 1, padding=rate, dilation=rate, bias=True),
+                nn.Conv2d(in_channels, out_channels, 3, 1, padding=rate, dilation=rate, bias=True),
             )
 
         for m in self.children():
@@ -98,8 +98,8 @@ class _ASPP_wrapper(nn.Sequential):
     '''
     wrapper to make it work with ContrastiveSegmentationModel
     '''
-    def __init__(self, in_ch, out_ch):
+    def __init__(self, in_channels, num_classes):
         super(_ASPP_wrapper, self).__init__(
             nn.Identity(),
-            _ASPP(in_ch, out_ch)
+            _ASPP(in_channels, num_classes)
         )
