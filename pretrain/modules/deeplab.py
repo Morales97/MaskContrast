@@ -81,6 +81,7 @@ class _ASPP(nn.Module):
 
     def __init__(self, in_channels, out_channels, rates=[6,12,18,24]):
         super(_ASPP, self).__init__()
+        self.in_channels = in_channels
         for i, rate in enumerate(rates):
             self.add_module(
                 "c{}".format(i),
