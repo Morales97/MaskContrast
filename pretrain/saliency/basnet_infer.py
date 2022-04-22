@@ -77,8 +77,8 @@ if __name__ == '__main__':
 	# --------- 1. get image path and name ---------
 	
 	if _cityscapes:
-		image_dir = '../data/cityscapes/leftImg8bit_small/'
-		save_dir = '../data/cityscapes/saliency_basnet_small/'
+		image_dir = '../data/cityscapes/leftImg8bit_tiny/'
+		save_dir = '../data/cityscapes/saliency_basnet_tiny/'
 	elif _gta:
 		image_dir = '../data/gta5/images_tiny/'
 		img_save_dir = '../data/gta5/images_tiny_cropped/'
