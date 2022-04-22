@@ -19,6 +19,7 @@ def load_pretrained_weights(p, model):
 		model_urls = {
 			'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
 			'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth',
+			"resnet101": "https://download.pytorch.org/models/resnet101-63fe2227.pth",
 		}
 		state_dict = load_state_dict_from_url(model_urls[p['backbone']],
 											  progress=True)
@@ -69,6 +70,10 @@ def get_model(p):
 			import torchvision.models.resnet as resnet
 			backbone = resnet.__dict__['resnet50'](pretrained=False)
 			backbone_channels = 2048
+		elif p['backbone'] == 'resnet101':
+			import torchvision.models.resnet as resnet
+			backbone = resnet.__dict__['resnet101'](pretrained=False)
+			backbone_channels = 2048
 		else:
 			raise ValueError('Invalid backbone {}'.format(p['backbone']))
 
@@ -86,6 +91,10 @@ def get_model(p):
 			from modules.deeplab import DeepLabHead
 			out_dim = p['model_kwargs']['ndim']
 			decoder = DeepLabHead(backbone_channels, out_dim)
+		if p['head'] == 'deeplabv2':
+			from modules.deeplab import _ASPP
+			out_dim = p['model_kwargs']['ndim']
+			decoder = _ASPP(backbone_channels, out_dim)
 		else:
 			raise ValueError('Invalid head {}'.format(p['head']))
 

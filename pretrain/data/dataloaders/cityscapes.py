@@ -36,7 +36,7 @@ def recursive_find_masks(rootdir=".", rootname=""):
 class Cityscapes(data.Dataset):
 
     def __init__(self, root='/home/danmoral/MaskContrast/pretrain/data/cityscapes',     #TODO change to use data.util.mypath as in VOCSegmentation
-                 saliency='saliency_basnet_tiny', split='leftImg8bit_tiny/train', n_samples=-1,
+                 saliency='saliency_basnet_small', split='leftImg8bit_small/train', n_samples=-1,
                  transform=None, overfit=False):
         super(Cityscapes, self).__init__()
 
@@ -45,7 +45,7 @@ class Cityscapes(data.Dataset):
         self.split = split
 
         self.images_dir = os.path.join(self.root, self.split)
-        valid_saliency = ['saliency_basnet_tiny']
+        valid_saliency = ['saliency_basnet_tiny', 'saliency_basnet_small']
         assert(saliency in valid_saliency)
         self.saliency = saliency
         self.sal_dir = os.path.join(self.root, self.saliency)
