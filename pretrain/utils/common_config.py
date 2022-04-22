@@ -92,9 +92,9 @@ def get_model(p):
 			out_dim = p['model_kwargs']['ndim']
 			decoder = DeepLabHead(backbone_channels, out_dim)
 		if p['head'] == 'deeplabv2':
-			from modules.deeplab import _ASPP
+			from modules.deeplab import _ASPP_wrapper
 			out_dim = p['model_kwargs']['ndim']
-			decoder = _ASPP(backbone_channels, out_dim)
+			decoder = _ASPP_wrapper(backbone_channels, out_dim)
 		else:
 			raise ValueError('Invalid head {}'.format(p['head']))
 

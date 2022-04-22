@@ -93,3 +93,13 @@ class _ASPP(nn.Module):
 
     def forward(self, x):
         return sum([stage(x) for stage in self.children()])
+
+class _ASPP_wrapper(nn.Sequential):
+    '''
+    wrapper to make it work with ContrastiveSegmentationModel
+    '''
+    def __init__(self, in_ch, out_ch):
+        super(_ASPP_wrapper, self).__init__(
+            nn.Identity(),
+            _ASPP(in_ch, out_ch)
+        )
