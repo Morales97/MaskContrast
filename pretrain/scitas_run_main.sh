@@ -15,14 +15,14 @@
 #python main_single_thread.py --expt_name=test_no_acc --config_env configs/env.yml --config_exp configs/VOCSegmentation_supervised_saliency_model.yml
 
 # cityscapes deeplab
-#python main_single_thread.py --expt_name=test --config_env configs/env.yml --config_exp configs/cityscapes.yml
+python main_single_thread.py --expt_name=CS_v2 --config_env configs/env.yml --config_exp configs/cityscapes_deeplabv2_rn101.yml
 
 #cityscapes+GTA deeplab
 #python main_single_thread.py --expt_name=CS_GTA_mn_deeplab --config_env configs/env.yml --config_exp configs/cityscapes_gta_deeplab.yml
 
 
 #cityscapes lraspp
-python main_single_thread.py --expt_name=CS_deeplab_random_neg --config_env configs/env.yml --config_exp configs/cityscapes_deeplab.yml
+#python main_single_thread.py --expt_name=CS_deeplab_random_neg --config_env configs/env.yml --config_exp configs/cityscapes_deeplab.yml
 
 #cityscapes+GTA lraspp
 #python main_single_thread.py --expt_name=CS_GTA_mn_lraspp_600_epochs --config_env configs/env.yml --config_exp configs/cityscapes_gta_lraspp.yml
