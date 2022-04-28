@@ -145,7 +145,7 @@ def get_train_dataset(p, transform=None, dataset=None, use_gt_masks=False):
 			return Gta(transform=transform, 
 					   use_gt_masks=use_gt_masks,
 					   saliency=p['train_db2_kwargs']['saliency_gt'],
-					   split='images_tiny_cropped_sup')   
+					   split='images_tiny_cropped')   
 		else:
 			return Gta(transform=transform)
 
