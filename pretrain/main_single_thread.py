@@ -61,7 +61,7 @@ parser.add_argument('--entity', type=str, default='morales97',
 parser.add_argument('--expt_name', type=str, default='',
                     help='Name of the experiment for wandb')
 
-parser.add_argument('--save_interval', default=50, type=int,
+parser.add_argument('--save_interval', default=200, type=int,
                     help='interval of epochs to save a checkpoint')
 
 def main():
